@@ -42,7 +42,7 @@ export default function PriceButtons({ price, item = {}, onAdd = () => {} }) {
     return (
       <button
         onClick={() => onAdd({ ...item, price: value })}
-        className="bg-gradient-to-r bg-[#5d3d29] text-white px-6 py-2 rounded-full"
+        className="bg-[#000] text-[#FFD700] px-6 py-2 rounded-full shadow"
       >
         Adicionar
       </button>
@@ -55,7 +55,7 @@ export default function PriceButtons({ price, item = {}, onAdd = () => {} }) {
         <button
           key={idx}
           onClick={() => onAdd({ ...item, price: val, size: sizeLabels[idx] })}
-          className="bg-gradient-to-r bg-[#5d3d29] text-white px-4 py-2 rounded-full"
+          className="bg-[#000] text-[#FFD700] px-4 py-2 rounded-full shadow"
         >
           {sizeLabels[idx]} - R$ {val.toFixed(2)}
         </button>

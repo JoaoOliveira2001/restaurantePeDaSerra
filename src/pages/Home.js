@@ -174,7 +174,7 @@ const Home = () => {
   };
 
   const sendWhatsAppOrder = () => {
-    let message = " *Pedido Orçamenthus*\n\n";
+    let message = " *Pedido Pé da Serra*\n\n";
 
     message += ` *Cliente:* ${nome || "Não informado"}\n`;
     message += ` *Telefone:* ${telefone || "Não informado"}\n`;
@@ -442,13 +442,13 @@ const Home = () => {
             <div className="flex items-center space-x-3">
               <img
                 src="https://i.imgur.com/wYccCFb.jpeg"
-                alt="Logo Orçamenthus"
+                alt="Logo Pé da Serra"
                 className="w-32 h-32 object-contain rounded-full"
               />
 
               <div>
                 <h3 className="text-3xl font-bold text-[#fff4e4]">
-                  Orçamenthus
+                  Pé da Serra
                 </h3>
                 <p className="text-[#5d3d29]">Sabor que conquista!</p>
               </div>
@@ -512,7 +512,7 @@ const Home = () => {
                 <div className="flex flex-col items-center justify-center text-gray-500 py-8">
                   <img
                     src="https://i.imgur.com/wYccCFb.jpeg"
-                    alt="Logo Orçamenthus"
+                    alt="Logo Pé da Serra"
                     className="w-14 h-14 object-contain rounded-full mb-4"
                   />
                   <p className="text-center font-semibold">
@@ -813,10 +813,10 @@ const Home = () => {
               <div className="flex items-center space-x-2 mb-4">
                 <img
                   src="https://i.imgur.com/wYccCFb.jpeg"
-                  alt="Logo Orçamenthus"
+                  alt="Logo Pé da Serra"
                   className="w-32 h-32 object-contain rounded-full"
                 />
-                <h3 className="text-2xl font-bold">Orçamenthus</h3>
+                <h3 className="text-2xl font-bold">Pé da Serra</h3>
               </div>
               <p className="text-gray-400">
                 Marmitas saborosas e nutritivas, preparadas com ingredientes
@@ -860,7 +860,7 @@ const Home = () => {
           </div>
 
           <div className="border-t border-gray-700 pt-8 mt-8 text-center text-gray-400">
-            <p>&copy; 2025 Orçamenthus. Todos os direitos reservados.</p>
+            <p>&copy; 2025 Pé da Serra. Todos os direitos reservados.</p>
           </div>
         </div>
       </footer>
