@@ -434,10 +434,10 @@ const Mesa = () => {
         <div className="container mx-auto px-4 py-4 flex items-center gap-4">
           <img
             src="https://i.imgur.com/wYccCFb.jpeg"
-            alt="Logo Orçamenthus"
+            alt="Logo Pé da Serra"
             className="w-20 h-20 object-contain rounded-full"
           />
-          <h1 className="text-2xl font-bold text-[#fff4e4]">Orçamenthus</h1>
+          <h1 className="text-2xl font-bold text-[#fff4e4]">Pé da Serra</h1>
           {mesa && (
             <span className="ml-auto text-white font-semibold">
               Mesa {mesa}
