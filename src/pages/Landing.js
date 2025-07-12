@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { ShoppingCart } from "lucide-react";
 
 const menu = {
   burgers: [
@@ -66,21 +65,6 @@ export default function Landing() {
   ];
 
   const [active, setActive] = useState("burgers");
-  const [cart, setCart] = useState([]);
-
-  const addToCart = (item) => {
-    setCart((prev) => {
-      const existing = prev.find((i) => i.id === item.id);
-      if (existing) {
-        return prev.map((i) =>
-          i.id === item.id ? { ...i, qty: i.qty + 1 } : i
-        );
-      }
-      return [...prev, { ...item, qty: 1 }];
-    });
-  };
-
-  const total = cart.reduce((t, i) => t + i.price * i.qty, 0);
 
   return (
     <div className="font-sans bg-gray-100 min-h-screen text-gray-800">
@@ -138,41 +122,12 @@ export default function Landing() {
                 <p className="text-sm text-gray-600">{item.description}</p>
                 <div className="flex justify-between items-center">
                   <span className="font-bold">R$ {item.price.toFixed(2)}</span>
-                  <button
-                    onClick={() => addToCart(item)}
-                    className="bg-[#FFD700] text-black px-3 py-1 rounded-full shadow"
-                  >
-                    Adicionar ao Carrinho
-                  </button>
                 </div>
               </div>
             </div>
           ))}
         </div>
       </main>
-
-      {cart.length > 0 && (
-        <div className="fixed bottom-4 right-4 bg-white rounded-lg shadow-lg p-4 w-64">
-          <h4 className="font-playfair mb-2 flex items-center gap-2">
-            <ShoppingCart size={18} /> Carrinho
-          </h4>
-          <ul className="max-h-40 overflow-y-auto text-sm">
-            {cart.map((it) => (
-              <li key={it.id} className="flex justify-between mb-1">
-                <span>{it.qty}x {it.name}</span>
-                <span>R$ {(it.price * it.qty).toFixed(2)}</span>
-              </li>
-            ))}
-          </ul>
-          <div className="flex justify-between font-bold mt-2">
-            <span>Total</span>
-            <span>R$ {total.toFixed(2)}</span>
-          </div>
-          <button className="mt-2 w-full bg-[#FFD700] text-black py-2 rounded-full">
-            Finalizar Pedido
-          </button>
-        </div>
-      )}
 
       <section id="sobre" className="max-w-5xl mx-auto p-4 my-12 flex flex-col md:flex-row items-center gap-6">
         <img
