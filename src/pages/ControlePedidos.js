@@ -186,7 +186,7 @@ const [pedidos, setPedidos] = useState([
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-between mb-2">
             <div className="flex items-center gap-3">
-              <h1 className="text-2xl font-bold">Orçamenthus</h1>
+              <h1 className="text-2xl font-bold">Pé da Serra</h1>
             </div>
             <button
               onClick={() => navigate("/")}
