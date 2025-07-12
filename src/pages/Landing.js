@@ -83,14 +83,9 @@ export default function Landing() {
   const total = cart.reduce((t, i) => t + i.price * i.qty, 0);
 
   return (
-    <div className="font-sans bg-gray-100 min-h-screen">
-      <header className="relative fixed top-0 left-0 w-full text-white z-50">
-        <img
-          src="https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=1200&q=80"
-          alt="Montanhas"
-          className="absolute inset-0 w-full h-full object-cover opacity-50 blur-sm -z-10"
-        />
-        <div className="relative max-w-4xl mx-auto flex items-center justify-between p-4">
+    <div className="font-sans bg-gray-100 min-h-screen text-gray-800">
+      <header className="fixed top-0 left-0 w-full bg-black text-white shadow z-50">
+        <div className="max-w-5xl mx-auto flex items-center justify-between p-4">
           <div className="flex items-center space-x-2">
             <img
               src="https://images.unsplash.com/photo-1551782450-a2132b4ba21d?auto=format&fit=crop&w=80&q=80"
@@ -102,53 +97,58 @@ export default function Landing() {
           <nav className="hidden md:flex space-x-6">
             <a href="#inicio" className="hover:text-[#FFD700]">Início</a>
             <a href="#menu" className="hover:text-[#FFD700]">Cardápio</a>
+            <a href="#reservas" className="hover:text-[#FFD700]">Reservas</a>
             <a href="#contato" className="hover:text-[#FFD700]">Contato</a>
           </nav>
+          <button className="bg-[#FFD700] text-black px-4 py-2 rounded-full shadow hover:brightness-110">
+            Peça agora
+          </button>
         </div>
       </header>
 
       <section
         id="inicio"
-        className="h-60 bg-cover bg-center flex items-center justify-center text-white mt-14"
-        style={{ backgroundImage: 'url(https://images.unsplash.com/photo-1600891964373-1ec2bd9d1d9e?auto=format&fit=crop&w=1350&q=80)' }}
+        className="h-72 md:h-96 bg-cover bg-center flex items-center justify-center text-white mt-16"
+        style={{ backgroundImage: 'url(https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=1350&q=80)' }}
       >
-        <div className="bg-black bg-opacity-60 p-4 rounded">
-          <h1 className="text-3xl font-playfair mb-2">Pé da Serra</h1>
-          <p className="text-sm font-light">Sabores que conectam você à natureza</p>
-        </div>
+        <h1 className="text-3xl md:text-5xl font-playfair bg-black bg-opacity-60 p-4 rounded">
+          Sabores que conectam você à natureza
+        </h1>
       </section>
 
-      <div id="menu" className="sticky top-14 bg-black text-white flex overflow-x-auto no-scrollbar space-x-6 px-4 py-2 justify-center">
+      <div id="menu" className="sticky top-16 bg-black text-white flex overflow-x-auto no-scrollbar space-x-6 px-4 py-2 justify-center">
         {categories.map((c) => (
           <button
             key={c.key}
             onClick={() => setActive(c.key)}
-            className={`whitespace-nowrap ${active === c.key ? 'text-[#FFD700]' : ''}`}
+            className={`whitespace-nowrap font-semibold ${active === c.key ? 'text-[#FFD700]' : ''}`}
           >
             {c.label}
           </button>
         ))}
       </div>
 
-      <main className="max-w-4xl mx-auto p-4 space-y-4">
-        {menu[active].map((item) => (
-          <div key={item.id} className="bg-white rounded-lg shadow overflow-hidden">
-            <img src={item.image} alt={item.name} className="h-40 w-full object-cover" />
-            <div className="p-4">
-              <h3 className="font-playfair text-lg">{item.name}</h3>
-              <p className="text-sm text-gray-600 mb-2">{item.description}</p>
-              <div className="flex justify-between items-center">
-                <span className="font-bold">R$ {item.price.toFixed(2)}</span>
-                <button
-                  onClick={() => addToCart(item)}
-                  className="bg-[#FFD700] text-black px-3 py-1 rounded-full shadow"
-                >
-                  Adicionar
-                </button>
+      <main className="max-w-5xl mx-auto p-4">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {menu[active].map((item) => (
+            <div key={item.id} className="bg-white rounded-lg shadow hover:shadow-md overflow-hidden">
+              <img src={item.image} alt={item.name} className="h-40 w-full object-cover" />
+              <div className="p-4 space-y-2">
+                <h3 className="font-playfair text-lg">{item.name}</h3>
+                <p className="text-sm text-gray-600">{item.description}</p>
+                <div className="flex justify-between items-center">
+                  <span className="font-bold">R$ {item.price.toFixed(2)}</span>
+                  <button
+                    onClick={() => addToCart(item)}
+                    className="bg-[#FFD700] text-black px-3 py-1 rounded-full shadow"
+                  >
+                    Adicionar ao Carrinho
+                  </button>
+                </div>
               </div>
             </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </main>
 
       {cart.length > 0 && (
@@ -174,8 +174,51 @@ export default function Landing() {
         </div>
       )}
 
-      <footer id="contato" className="mt-16 p-4 text-center text-sm text-gray-600">
-        © 2025 Pé da Serra
+      <section id="sobre" className="max-w-5xl mx-auto p-4 my-12 flex flex-col md:flex-row items-center gap-6">
+        <img
+          src="https://images.unsplash.com/photo-1502899576159-f224dc2349ec?auto=format&fit=crop&w=600&q=80"
+          alt="Paisagem serrana"
+          className="w-full md:w-1/2 rounded-lg shadow"
+        />
+        <p className="text-gray-700 leading-relaxed">
+          O Pé da Serra nasceu para celebrar a culinária regional com um toque de
+          sofisticação. Em nosso restaurante, cada prato é preparado com
+          ingredientes selecionados e muito carinho.
+        </p>
+      </section>
+
+      <section id="promocoes" className="bg-black text-[#FFD700] py-8">
+        <div className="max-w-5xl mx-auto px-4 text-center space-y-4">
+          <h2 className="font-playfair text-2xl">Promoções</h2>
+          <p>Confira nossos pratos do dia e aproveite ofertas especiais!</p>
+        </div>
+      </section>
+
+      <footer id="contato" className="bg-gray-900 text-gray-300 py-8 mt-16">
+        <div className="max-w-5xl mx-auto px-4 grid md:grid-cols-3 gap-8">
+          <div>
+            <h3 className="font-playfair text-lg text-white mb-2">Contato</h3>
+            <p>Fone: (11) 99999-9999</p>
+            <p>Email: contato@pedaserra.com</p>
+          </div>
+          <div>
+            <h3 className="font-playfair text-lg text-white mb-2">Redes Sociais</h3>
+            <ul className="space-y-1">
+              <li><a href="#" className="hover:text-[#FFD700]">Instagram</a></li>
+              <li><a href="#" className="hover:text-[#FFD700]">Facebook</a></li>
+            </ul>
+          </div>
+          <div>
+            <iframe
+              className="w-full h-32 rounded"
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3656.401176463542!2d-46.660399484475675!3d-23.588503768091687!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMjPCsDM1JzE4LjYiUyA0NsKwMzknMzIuMSJX!5e0!3m2!1sen!2sbr!4v1600000000000!5m2!1sen!2sbr"
+              allowFullScreen=""
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+            ></iframe>
+          </div>
+        </div>
+        <p className="mt-8 text-center text-sm">© 2025 Pé da Serra</p>
       </footer>
     </div>
   );
