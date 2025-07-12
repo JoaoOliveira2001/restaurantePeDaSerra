@@ -84,13 +84,8 @@ export default function Landing() {
 
   return (
     <div className="font-sans bg-gray-100 min-h-screen">
-      <header className="relative fixed top-0 left-0 w-full text-white z-50">
-        <img
-          src="https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=1200&q=80"
-          alt="Montanhas"
-          className="absolute inset-0 w-full h-full object-cover opacity-50 blur-sm -z-10"
-        />
-        <div className="relative max-w-4xl mx-auto flex items-center justify-between p-4">
+      <header className="fixed top-0 left-0 w-full bg-black text-white z-50">
+        <div className="max-w-5xl mx-auto flex items-center justify-between p-4">
           <div className="flex items-center space-x-2">
             <img
               src="https://images.unsplash.com/photo-1551782450-a2132b4ba21d?auto=format&fit=crop&w=80&q=80"
@@ -102,23 +97,31 @@ export default function Landing() {
           <nav className="hidden md:flex space-x-6">
             <a href="#inicio" className="hover:text-[#FFD700]">Início</a>
             <a href="#menu" className="hover:text-[#FFD700]">Cardápio</a>
+            <a href="#reservas" className="hover:text-[#FFD700]">Reservas</a>
             <a href="#contato" className="hover:text-[#FFD700]">Contato</a>
           </nav>
+          <a
+            href="#menu"
+            className="ml-4 bg-[#FFD700] text-black px-4 py-2 rounded-full shadow"
+          >
+            Peça agora
+          </a>
         </div>
       </header>
 
       <section
         id="inicio"
-        className="h-60 bg-cover bg-center flex items-center justify-center text-white mt-14"
-        style={{ backgroundImage: 'url(https://images.unsplash.com/photo-1600891964373-1ec2bd9d1d9e?auto=format&fit=crop&w=1350&q=80)' }}
+        className="mt-16 h-72 bg-cover bg-center flex items-center justify-center text-white"
+        style={{ backgroundImage: 'url(https://images.unsplash.com/photo-1600891964733-acef07f63ec4?auto=format&fit=crop&w=1200&q=80)' }}
       >
-        <div className="bg-black bg-opacity-60 p-4 rounded">
-          <h1 className="text-3xl font-playfair mb-2">Pé da Serra</h1>
-          <p className="text-sm font-light">Sabores que conectam você à natureza</p>
+        <div className="bg-black bg-opacity-50 p-6 rounded">
+          <h1 className="text-2xl md:text-4xl font-playfair mb-2 text-center">
+            Sabores que conectam você à natureza
+          </h1>
         </div>
       </section>
 
-      <div id="menu" className="sticky top-14 bg-black text-white flex overflow-x-auto no-scrollbar space-x-6 px-4 py-2 justify-center">
+      <div id="menu" className="sticky top-16 bg-black text-white flex overflow-x-auto no-scrollbar space-x-6 px-4 py-2 justify-center">
         {categories.map((c) => (
           <button
             key={c.key}
@@ -151,6 +154,22 @@ export default function Landing() {
         ))}
       </main>
 
+      <section className="bg-black text-[#FFD700] py-8 text-center">
+        <h2 className="font-playfair text-2xl mb-2">Promoção do Dia</h2>
+        <p className="text-white">Aproveite o Burger da Serra com 20% de desconto!</p>
+      </section>
+
+      <section id="sobre" className="max-w-5xl mx-auto grid md:grid-cols-2 gap-4 p-4 items-center">
+        <img
+          src="https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=600&q=80"
+          alt="Paisagem serrana"
+          className="rounded-lg h-48 w-full object-cover"
+        />
+        <p className="text-gray-700 text-sm md:text-base">
+          O Restaurante Pé da Serra nasceu do encontro entre a gastronomia e a natureza. Nosso objetivo é oferecer pratos frescos em um ambiente acolhedor no alto da serra.
+        </p>
+      </section>
+
       {cart.length > 0 && (
         <div className="fixed bottom-4 right-4 bg-white rounded-lg shadow-lg p-4 w-64">
           <h4 className="font-playfair mb-2 flex items-center gap-2">
@@ -168,14 +187,33 @@ export default function Landing() {
             <span>Total</span>
             <span>R$ {total.toFixed(2)}</span>
           </div>
-          <button className="mt-2 w-full bg-[#FFD700] text-black py-2 rounded-full">
+          <button className="mt-2 w-full bg-[#FFD700] text-black py-2 rounded-full shadow">
             Finalizar Pedido
           </button>
         </div>
       )}
 
-      <footer id="contato" className="mt-16 p-4 text-center text-sm text-gray-600">
-        © 2025 Pé da Serra
+      <footer id="contato" className="bg-gray-900 text-gray-300 mt-16">
+        <div className="max-w-5xl mx-auto p-6 grid md:grid-cols-3 gap-4 text-sm">
+          <div>
+            <h3 className="font-playfair text-white mb-2">Contato</h3>
+            <p>(99) 99999-9999</p>
+            <p>contato@pedaserra.com</p>
+          </div>
+          <div>
+            <h3 className="font-playfair text-white mb-2">Redes Sociais</h3>
+            <p>Instagram</p>
+            <p>Facebook</p>
+          </div>
+          <div>
+            <h3 className="font-playfair text-white mb-2">Endereço</h3>
+            <img
+              src="https://images.unsplash.com/photo-1528909514045-2fa4ac7a08ba?auto=format&fit=crop&w=400&q=60"
+              alt="Mapa"
+              className="w-full h-32 object-cover rounded"
+            />
+          </div>
+        </div>
       </footer>
     </div>
   );
