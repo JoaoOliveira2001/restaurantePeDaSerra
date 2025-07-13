@@ -4,6 +4,7 @@ import Landing from "./pages/Landing";
 import ControlePedidos from "./pages/ControlePedidos";
 import Dashboard from "./pages/Dashboard";
 import Mesa from "./pages/Mesa";
+import Cardapio from "./pages/Cardapio";
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
       <Route path="/controle-pedidos" element={<ControlePedidos />} />
       <Route path="/dashboard" element={<Dashboard />} />
       <Route path="/mesa" element={<Mesa />} />
+      <Route path="/cardapio" element={<Cardapio />} />
     </Routes>
   );
 }

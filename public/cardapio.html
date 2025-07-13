@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cardápio - Pé da Serra</title>
+    <!-- Tailwind para estilos rápidos -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      /* Estilo para placeholder de imagem */
+      .placeholder {
+        background-color: #e2e8f0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #94a3b8;
+      }
+    </style>
+  </head>
+  <body class="bg-gray-100 font-sans">
+    <header class="text-center py-4 bg-[#5d3d29] text-white shadow-md">
+      <h1 class="text-2xl font-bold">Cardápio - Pé da Serra</h1>
+    </header>
+
+    <main id="menu" class="max-w-6xl mx-auto p-4"></main>
+
+    <template id="item-template">
+      <div class="bg-white rounded-lg shadow flex flex-col">
+        <div class="h-40 w-full overflow-hidden">
+          <img class="w-full h-full object-cover" />
+        </div>
+        <div class="p-4 flex flex-col flex-1">
+          <h3 class="font-semibold mb-1"></h3>
+          <p class="text-sm text-gray-600 flex-1"></p>
+          <span class="font-bold mt-2"></span>
+        </div>
+      </div>
+    </template>
+
+    <script>
+      const menuEl = document.getElementById('menu');
+      const template = document.getElementById('item-template');
+
+      function formatPrice(value) {
+        return new Intl.NumberFormat('pt-BR', {
+          style: 'currency',
+          currency: 'BRL'
+        }).format(value);
+      }
+
+      function createSection(title) {
+        const section = document.createElement('section');
+        section.className = 'mb-8';
+        const header = document.createElement('h2');
+        header.className = 'text-xl font-bold mb-4 text-[#5d3d29]';
+        header.textContent = title;
+        section.appendChild(header);
+
+        const grid = document.createElement('div');
+        grid.className =
+          'grid gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4';
+        section.appendChild(grid);
+
+        menuEl.appendChild(section);
+        return grid;
+      }
+
+      function renderMenu(items) {
+        menuEl.innerHTML = '';
+        const groups = items.reduce((acc, item) => {
+          (acc[item.type] = acc[item.type] || []).push(item);
+          return acc;
+        }, {});
+
+        for (const [type, list] of Object.entries(groups)) {
+          const grid = createSection(type.charAt(0).toUpperCase() + type.slice(1));
+          list.forEach((item) => {
+            const clone = template.content.cloneNode(true);
+            const img = clone.querySelector('img');
+            if (item.image) {
+              img.src = item.image;
+            } else {
+              img.classList.add('placeholder');
+              img.removeAttribute('src');
+              img.textContent = 'Sem imagem';
+            }
+            clone.querySelector('h3').textContent = item.name;
+            clone.querySelector('p').textContent = item.description;
+            clone.querySelector('span').textContent = formatPrice(item.price);
+            grid.appendChild(clone);
+          });
+        }
+      }
+
+      async function carregarCardapio() {
+        menuEl.innerHTML = '<p class="text-center py-8">Carregando...</p>';
+        try {
+          const res = await fetch(
+            'https://script.google.com/macros/s/AKfycbw8sP2L9-3xqkjum6UBdcazZZYabbOMOypuvw27Zlu6rysvnWE2PtfPBxZ3AtcfdP1a/exec'
+          );
+          if (!res.ok) throw new Error('Erro ao buscar API');
+          const data = await res.json();
+          renderMenu(data);
+        } catch (err) {
+          console.error(err);
+          menuEl.innerHTML = '<p class="text-center text-red-500 py-8">Não foi possível carregar o cardápio.</p>';
+        }
+      }
+
+      carregarCardapio();
+    </script>
+  </body>
+</html>
