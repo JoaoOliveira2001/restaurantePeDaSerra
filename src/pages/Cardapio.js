@@ -8,7 +8,9 @@ export default function Cardapio() {
   useEffect(() => {
     async function fetchData() {
       try {
-        const res = await fetch('/api/cardapio');
+        const res = await fetch(
+          'https://script.google.com/macros/s/AKfycbw8sP2L9-3xqkjum6UBdcazZZYabbOMOypuvw27Zlu6rysvnWE2PtfPBxZ3AtcfdP1a/exec'
+        );
         if (!res.ok) throw new Error('Erro ao buscar card\u00e1pio');
         const data = await res.json();
         setItems(data);

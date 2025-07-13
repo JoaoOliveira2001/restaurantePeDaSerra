@@ -96,7 +96,9 @@
       async function carregarCardapio() {
         menuEl.innerHTML = '<p class="text-center py-8">Carregando...</p>';
         try {
-          const res = await fetch('/api/cardapio');
+          const res = await fetch(
+            'https://script.google.com/macros/s/AKfycbw8sP2L9-3xqkjum6UBdcazZZYabbOMOypuvw27Zlu6rysvnWE2PtfPBxZ3AtcfdP1a/exec'
+          );
           if (!res.ok) throw new Error('Erro ao buscar API');
           const data = await res.json();
           renderMenu(data);
