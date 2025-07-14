@@ -112,6 +112,8 @@ export default function Landing() {
     );
   };
 
+  const logoUrl = "https://i.imgur.com/0qfGnRz.jpeg";
+
   return (
     <div className="font-sans bg-gray-100 min-h-screen">
       <header className="relative fixed top-0 left-0 w-full text-white z-50">
@@ -123,9 +125,9 @@ export default function Landing() {
         <div className="relative max-w-4xl mx-auto flex items-center justify-between p-4">
           <div className="flex items-center space-x-2">
             <img
-              src="https://images.unsplash.com/photo-1551782450-a2132b4ba21d?auto=format&fit=crop&w=80&q=80"
+              src={logoUrl}
               alt="Logo Pé da Serra"
-              className="w-10 h-10 rounded-full"
+              className="w-10 h-10 rounded-full object-cover"
             />
             <span className="font-playfair text-xl">Pé da Serra</span>
           </div>
@@ -145,7 +147,12 @@ export default function Landing() {
             'url(https://images.unsplash.com/photo-1600891964373-1ec2bd9d1d9e?auto=format&fit=crop&w=1350&q=80)',
         }}
       >
-        <div className="bg-black bg-opacity-60 p-4 rounded">
+        <div className="bg-black bg-opacity-60 p-4 rounded text-center">
+          <img
+            src={logoUrl}
+            alt="Logo Pé da Serra"
+            className="w-20 h-20 object-cover rounded-full mx-auto mb-2"
+          />
           <h1 className="text-3xl font-playfair mb-2">Pé da Serra</h1>
           <p className="text-sm font-light">
             Sabores que conectam você à natureza
@@ -217,6 +224,11 @@ export default function Landing() {
             className="w-full bg-white shadow-lg p-4 pb-6 mt-4"
           >
             <h4 className="font-playfair mb-2 flex items-center gap-2">
+              <img
+                src={logoUrl}
+                alt="Logo Pé da Serra"
+                className="w-5 h-5 object-cover rounded-full"
+              />
               <ShoppingCart size={18} /> Carrinho
             </h4>
             <ul className="max-h-40 overflow-y-auto text-sm mb-2">
@@ -275,7 +287,12 @@ export default function Landing() {
           ref={formRef}
           className="max-w-2xl mx-auto p-4 mt-4 bg-white shadow"
         >
-          <h2 className="text-xl font-bold mb-4">Finalizar Pedido</h2>
+          <img
+            src={logoUrl}
+            alt="Logo Pé da Serra"
+            className="w-16 h-16 object-cover rounded-full mx-auto mb-4"
+          />
+          <h2 className="text-xl font-bold mb-4 text-center">Finalizar Pedido</h2>
           <form onSubmit={handleSubmit} className="space-y-4">
             <fieldset>
               <legend className="font-semibold mb-2">Dados do cliente</legend>
@@ -430,6 +447,11 @@ export default function Landing() {
         id="contato"
         className="mt-16 p-4 text-center text-sm text-gray-600"
       >
+        <img
+          src={logoUrl}
+          alt="Logo Pé da Serra"
+          className="w-10 h-10 object-cover rounded-full mx-auto mb-2"
+        />
         © 2025 Pé da Serra
       </footer>
     </div>
