@@ -177,7 +177,7 @@ export default function Landing() {
           </button>
           <div
             ref={cartRef}
-            className="fixed bottom-0 left-0 w-full bg-white shadow-lg p-4 pb-6 z-40"
+            className="w-full bg-white shadow-lg p-4 pb-6 mt-4"
           >
             <h4 className="font-playfair mb-2 flex items-center gap-2">
               <ShoppingCart size={18} /> Carrinho
