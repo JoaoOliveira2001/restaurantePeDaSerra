@@ -96,6 +96,7 @@ export default function Landing() {
             <a href="#inicio" className="hover:text-[#FFD700]">Início</a>
             <a href="#menu" className="hover:text-[#FFD700]">Cardápio</a>
             <a href="#contato" className="hover:text-[#FFD700]">Contato</a>
+            <a href="#/logo" className="hover:text-[#FFD700]">Logo 3D</a>
           </nav>
         </div>
       </header>
