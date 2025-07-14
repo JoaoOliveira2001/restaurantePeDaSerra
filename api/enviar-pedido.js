@@ -8,7 +8,9 @@ export default async function handler(req, res) {
   try {
     const pedido = req.body;
 
-    const url = "https://script.google.com/macros/s/AKfycbxCyDQIfz7-x-YP2paxUgKEF41Txa25PKYvbqE-DwenDqMELm7mCoe5Jd51iDk1LiDu/exec";
+    // Webhook para registrar o pedido
+    const url =
+      "http://145.223.31.139:5678/webhook/bd2cb2de-d81e-429a-8527-3dda5cf315d8";
 
     const response = await fetch(url, {
       method: "POST",
