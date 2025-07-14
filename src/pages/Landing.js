@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { ShoppingCart } from "lucide-react";
+import React, { useState, useEffect, useRef } from "react";
+import { ShoppingCart, Plus, Minus, Trash } from "lucide-react";
 
 export default function Landing() {
   const categories = [
@@ -12,6 +12,7 @@ export default function Landing() {
   const [active, setActive] = useState("lanche");
   const [menu, setMenu] = useState({ lanche: [], combo: [], "porção": [], bebida: [] });
   const [cart, setCart] = useState([]);
+  const cartRef = useRef(null);
 
   useEffect(() => {
     fetch('/api/cardapio')
@@ -38,11 +39,41 @@ export default function Landing() {
           i.id === item.id ? { ...i, qty: i.qty + 1 } : i
         );
       }
-      return [...prev, { ...item, qty: 1 }];
+      return [...prev, { ...item, qty: 1, obs: "" }];
     });
   };
 
+  const increase = (id) => {
+    setCart((prev) =>
+      prev.map((i) => (i.id === id ? { ...i, qty: i.qty + 1 } : i))
+    );
+  };
+
+  const decrease = (id) => {
+    setCart((prev) =>
+      prev
+        .map((i) =>
+          i.id === id ? { ...i, qty: i.qty - 1 } : i
+        )
+        .filter((i) => i.qty > 0)
+    );
+  };
+
+  const removeItem = (id) => {
+    setCart((prev) => prev.filter((i) => i.id !== id));
+  };
+
+  const updateObs = (id, text) => {
+    setCart((prev) =>
+      prev.map((i) => (i.id === id ? { ...i, obs: text } : i))
+    );
+  };
+
   const total = cart.reduce((t, i) => t + i.price * i.qty, 0);
+
+  const scrollToCart = () => {
+    cartRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
 
   return (
     <div className="font-sans bg-gray-100 min-h-screen">
@@ -137,28 +168,66 @@ export default function Landing() {
       </main>
 
       {cart.length > 0 && (
-        <div className="fixed bottom-4 right-4 bg-white rounded-lg shadow-lg p-4 w-64">
-          <h4 className="font-playfair mb-2 flex items-center gap-2">
-            <ShoppingCart size={18} /> Carrinho
-          </h4>
-          <ul className="max-h-40 overflow-y-auto text-sm">
-            {cart.map((it) => (
-              <li key={it.id} className="flex justify-between mb-1">
-                <span>
-                  {it.qty}x {it.name}
-                </span>
-                <span>R$ {(it.price * it.qty).toFixed(2)}</span>
-              </li>
-            ))}
-          </ul>
-          <div className="flex justify-between font-bold mt-2">
-            <span>Total</span>
-            <span>R$ {total.toFixed(2)}</span>
-          </div>
-          <button className="mt-2 w-full bg-[#FFD700] text-black py-2 rounded-full">
-            Finalizar Pedido
+        <>
+          <button
+            onClick={scrollToCart}
+            className="fixed bottom-4 right-4 bg-[#FFD700] text-black p-3 rounded-full shadow-lg z-50"
+          >
+            <ShoppingCart size={20} />
           </button>
-        </div>
+          <div
+            ref={cartRef}
+            className="w-full bg-white shadow-lg p-4 pb-6 mt-4"
+          >
+            <h4 className="font-playfair mb-2 flex items-center gap-2">
+              <ShoppingCart size={18} /> Carrinho
+            </h4>
+            <ul className="max-h-40 overflow-y-auto text-sm mb-2">
+              {cart.map((it) => (
+                <li
+                  key={it.id}
+                  className="mb-2 border-b pb-2 last:border-b-0 last:pb-0"
+                >
+                  <div className="flex justify-between items-center">
+                    <span className="font-medium">{it.name}</span>
+                    <div className="flex items-center space-x-1">
+                      <button onClick={() => decrease(it.id)} className="p-1">
+                        <Minus size={14} />
+                      </button>
+                      <span>{it.qty}</span>
+                      <button onClick={() => increase(it.id)} className="p-1">
+                        <Plus size={14} />
+                      </button>
+                      <button
+                        onClick={() => removeItem(it.id)}
+                        className="p-1 text-red-600"
+                      >
+                        <Trash size={14} />
+                      </button>
+                    </div>
+                  </div>
+                  <input
+                    type="text"
+                    value={it.obs}
+                    onChange={(e) => updateObs(it.id, e.target.value)}
+                    placeholder="Observações"
+                    className="mt-1 w-full border rounded px-2 py-1 text-xs"
+                  />
+                  <div className="text-right text-xs mt-1">
+                    R$ {(it.price * it.qty).toFixed(2)}
+                  </div>
+                </li>
+              ))}
+            </ul>
+            <div className="flex justify-between font-bold mt-2">
+              <span>Total</span>
+              <span>R$ {total.toFixed(2)}</span>
+            </div>
+            <button className="mt-2 w-full bg-[#FFD700] text-black py-2 rounded-full">
+              Finalizar Pedido
+            </button>
+          </div>
+        </>
       )}
 
       <footer
