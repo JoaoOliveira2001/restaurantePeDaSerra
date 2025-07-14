@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { ShoppingCart, Plus, Minus, Trash } from "lucide-react";
+import { Link } from "react-router-dom";
 
 export default function Landing() {
   const categories = [
@@ -223,9 +224,12 @@ export default function Landing() {
               <span>Total</span>
               <span>R$ {total.toFixed(2)}</span>
             </div>
-            <button className="mt-2 w-full bg-[#FFD700] text-black py-2 rounded-full">
+            <Link
+              to="/pedido"
+              className="mt-2 block text-center w-full bg-[#FFD700] text-black py-2 rounded-full"
+            >
               Finalizar Pedido
-            </button>
+            </Link>
           </div>
         </>
       )}
