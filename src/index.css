@@ -11,3 +11,107 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+.grid {
+  display: grid;
+  gap: 1rem;
+}
+@media (min-width: 768px) {
+  .grid-cols-3 {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+.card {
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  padding: 0.5rem;
+}
+.price-buttons {
+  display: flex;
+  align-items: center;
+  margin-top: 0.5rem;
+}
+.price-buttons button {
+  padding: 0.25rem 0.5rem;
+  border: 1px solid #ccc;
+  background: #fff;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.price-buttons .add {
+  background: #16a34a;
+  color: #fff;
+  margin-left: auto;
+}
+.price-buttons .qty {
+  margin: 0 0.5rem;
+}
+.price-buttons .price {
+  margin-left: 0.5rem;
+}
+.cart {
+  position: fixed;
+  bottom: 1rem;
+  right: 1rem;
+  background: #fff;
+  padding: 1rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  border-radius: 8px;
+  width: 16rem;
+}
+.cart .title {
+  margin-bottom: 0.5rem;
+  font-weight: bold;
+}
+.cart .list {
+  max-height: 10rem;
+  overflow-y: auto;
+  font-size: 0.875rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.cart .row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.25rem;
+}
+.cart .total {
+  font-weight: 600;
+  margin-top: 0.5rem;
+}
+.landing {
+  padding: 1rem;
+}
+.landing .title {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+.tabs {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+.tabs .active {
+  text-decoration: underline;
+  font-weight: bold;
+}
+.thumb {
+  width: 100%;
+  height: 8rem;
+  object-fit: cover;
+  border-radius: 4px;
+}
+.name {
+  margin-top: 0.5rem;
+  font-weight: 600;
+}
+.desc {
+  font-size: 0.875rem;
+  color: #555;
+}
+.time {
+  font-size: 0.875rem;
+  color: #333;
+}
