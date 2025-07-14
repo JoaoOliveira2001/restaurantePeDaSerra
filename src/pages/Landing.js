@@ -92,10 +92,62 @@ export default function Landing() {
     setForm((f) => ({ ...f, [name]: value }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Pedido enviado", { cart, ...form });
-    alert("Pedido enviado! Consulte o console para ver os dados.");
+
+    const id = Math.random().toString(36).substr(2, 9).toUpperCase();
+    const data = new Date().toISOString().split("T")[0];
+
+    const endereco =
+      form.recebimento === "entrega"
+        ? `${form.rua}, ${form.numero}${form.complemento ? ' - ' + form.complemento : ''}, ${form.bairro}, ${form.cidade} - ${form.estado}, ${form.cep}`
+        : "Retirada no local";
+
+    const produtos = cart
+      .map((i) => `${i.name} x${i.qty}${i.obs ? " (" + i.obs + ")" : ""}`)
+      .join(", ");
+
+    const quantidade = cart.reduce((t, i) => t + i.qty, 0);
+    const totalItens = cart.reduce((t, i) => t + i.price * i.qty, 0);
+    const frete = Number(form.frete || 0);
+
+    const pedido = {
+      id,
+      data,
+      nome: form.nome,
+      telefone: form.telefone,
+      endereco,
+      produtos,
+      frete,
+      quantidade,
+      total: Number((totalItens + frete).toFixed(2)),
+      pagamento:
+        form.pagamento === "dinheiro" && form.troco
+          ? `Dinheiro (troco para ${form.troco})`
+          : form.pagamento,
+      status: "Pendente",
+      observacoes: form.observacoes,
+    };
+
+    try {
+      const response = await fetch("/api/enviar-pedido", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(pedido),
+      });
+
+      if (!response.ok) {
+        const text = await response.text();
+        throw new Error(text || "Erro ao enviar pedido");
+      }
+
+      alert("Pedido enviado com sucesso!");
+      setCart([]);
+      setShowForm(false);
+    } catch (err) {
+      console.error("Falha ao enviar pedido:", err);
+      alert("Erro ao enviar pedido");
+    }
   };
 
   const total = cart.reduce((t, i) => t + i.price * i.qty, 0);
