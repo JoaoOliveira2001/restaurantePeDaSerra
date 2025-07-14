@@ -297,6 +297,15 @@ export default function Landing() {
                   className="border p-2 rounded"
                 />
               </div>
+              <select
+                name="recebimento"
+                value={form.recebimento}
+                onChange={handleChange}
+                className="border p-2 rounded w-full"
+              >
+                <option value="entrega">Entrega</option>
+                <option value="retirada">Retirada no local</option>
+              </select>
             </fieldset>
 
             {form.recebimento === "entrega" && (
@@ -384,23 +393,18 @@ export default function Landing() {
                     className="border p-2 rounded"
                   />
                 )}
-                <select
-                  name="recebimento"
-                  value={form.recebimento}
-                  onChange={handleChange}
-                  className="border p-2 rounded"
-                >
-                  <option value="entrega">Entrega</option>
-                  <option value="retirada">Retirada no local</option>
-                </select>
                 {form.recebimento === "entrega" && (
-                  <input
+                  <select
                     name="frete"
                     value={form.frete}
                     onChange={handleChange}
-                    placeholder="Frete"
                     className="border p-2 rounded"
-                  />
+                  >
+                    <option value="">Escolha o frete</option>
+                    <option value="5">R$ 5</option>
+                    <option value="10">R$ 10</option>
+                    <option value="15">R$ 15</option>
+                  </select>
                 )}
                 <textarea
                   name="observacoes"
