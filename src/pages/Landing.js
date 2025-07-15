@@ -189,17 +189,13 @@ export default function Landing() {
             />
             <span className="font-playfair text-xl">Pé da Serra</span>
           </div>
-          <nav className="hidden md:flex space-x-6">
-            <a href="#inicio" className="hover:text-[#FFD700]">Início</a>
-            <a href="#menu" className="hover:text-[#FFD700]">Cardápio</a>
-            <a href="#contato" className="hover:text-[#FFD700]">Contato</a>
-          </nav>
+          <nav className="hidden md:flex space-x-6"></nav>
         </div>
       </header>
 
       <section id="inicio" className="relative h-60 flex items-center justify-center text-white">
         <img
-          src="https://images.unsplash.com/photo-1605276377073-d86e9f71e1d8?auto=format&fit=crop&w=1350&q=80"
+          src="https://i.imgur.com/DbVYSxW.png"
           alt="Serra"
           className="absolute inset-0 w-full h-full object-cover"
         />
@@ -266,6 +262,8 @@ export default function Landing() {
         ))}
       </main>
 
+
+      <ToastContainer position="bottom-right" style={{ bottom: '5rem' }} />
 
       <button
         onClick={openCart}
@@ -528,7 +526,6 @@ export default function Landing() {
         />
         © 2025 Pé da Serra
       </footer>
-      <ToastContainer />
     </div>
   );
 }
