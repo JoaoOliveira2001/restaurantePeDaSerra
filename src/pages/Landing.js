@@ -151,6 +151,23 @@ export default function Landing() {
       alert("Pedido enviado com sucesso!");
       setCart([]);
       setShowForm(false);
+      const msg =
+        `Olá, gostaria de fazer o pedido ${id}.\n` +
+        `Itens: ${produtos}\n` +
+        `Total: R$ ${(totalItens + frete).toFixed(2)}\n` +
+        `Nome: ${form.nome}\n` +
+        `Telefone: ${form.telefone}\n` +
+        `Endereço: ${endereco}\n` +
+        `Pagamento: ${
+          form.pagamento === "dinheiro" && form.troco
+            ? `Dinheiro (troco para ${form.troco})`
+            : form.pagamento
+        }` +
+        (form.observacoes ? `\nObs: ${form.observacoes}` : "");
+      window.open(
+        `https://wa.me/5511998341875?text=${encodeURIComponent(msg)}`,
+        "_blank"
+      );
     } catch (err) {
       console.error("Falha ao enviar pedido:", err);
       alert("Erro ao enviar pedido");
@@ -168,6 +185,7 @@ export default function Landing() {
   };
 
   const openForm = () => {
+    setDrawerOpen(false);
     setShowForm(true);
     setTimeout(
       () => formRef.current?.scrollIntoView({ behavior: "smooth" }),
@@ -179,7 +197,7 @@ export default function Landing() {
 
   return (
     <div className="font-sans bg-gray-100 min-h-screen">
-      <header className="sticky top-0 w-full text-white z-50 bg-black/70 backdrop-blur">
+      <header className="sticky top-0 w-full text-white z-50 bg-black">
         <div className="max-w-4xl mx-auto flex items-center justify-between p-4">
           <div className="flex items-center space-x-2">
             <img
@@ -509,7 +527,7 @@ export default function Landing() {
               type="submit"
               className="bg-[#FFD700] text-black px-4 py-2 rounded-full"
             >
-              Enviar Pedido
+              Finalizar Pedido
             </button>
           </form>
         </div>
