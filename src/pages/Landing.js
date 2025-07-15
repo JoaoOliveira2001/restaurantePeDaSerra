@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
-import { ShoppingCart, Plus, Minus, Trash } from "lucide-react";
+import { ShoppingCart, Plus, Minus, Trash, X } from "lucide-react";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function Landing() {
   const categories = [
@@ -15,6 +17,7 @@ export default function Landing() {
   const cartRef = useRef(null);
   const formRef = useRef(null);
   const [showForm, setShowForm] = useState(false);
+  const [drawerOpen, setDrawerOpen] = useState(false);
   const [form, setForm] = useState({
     nome: "",
     telefone: "",
@@ -58,6 +61,10 @@ export default function Landing() {
         );
       }
       return [...prev, { ...item, qty: 1, obs: "" }];
+    });
+    toast.success(`✅ ${item.name} adicionado ao carrinho`, {
+      autoClose: 2000,
+      hideProgressBar: true,
     });
   };
 
@@ -152,8 +159,12 @@ export default function Landing() {
 
   const total = cart.reduce((t, i) => t + i.price * i.qty, 0);
 
-  const scrollToCart = () => {
-    cartRef.current?.scrollIntoView({ behavior: "smooth" });
+  const openCart = () => {
+    setDrawerOpen(true);
+  };
+
+  const closeCart = () => {
+    setDrawerOpen(false);
   };
 
   const openForm = () => {
@@ -168,13 +179,8 @@ export default function Landing() {
 
   return (
     <div className="font-sans bg-gray-100 min-h-screen">
-      <header className="relative fixed top-0 left-0 w-full text-white z-50">
-        <img
-          src="https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=1200&q=80"
-          alt="Montanhas"
-          className="absolute inset-0 w-full h-full object-cover opacity-50 blur-sm -z-10"
-        />
-        <div className="relative max-w-4xl mx-auto flex items-center justify-between p-4">
+      <header className="sticky top-0 w-full text-white z-50 bg-black/70 backdrop-blur">
+        <div className="max-w-4xl mx-auto flex items-center justify-between p-4">
           <div className="flex items-center space-x-2">
             <img
               src={logoUrl}
@@ -191,30 +197,27 @@ export default function Landing() {
         </div>
       </header>
 
-      <section
-        id="inicio"
-        className="h-60 bg-cover bg-center flex items-center justify-center text-white mt-14"
-        style={{
-          backgroundImage:
-            'url(https://images.unsplash.com/photo-1600891964373-1ec2bd9d1d9e?auto=format&fit=crop&w=1350&q=80)',
-        }}
-      >
-        <div className="bg-black bg-opacity-60 p-4 rounded text-center">
+      <section id="inicio" className="relative h-60 flex items-center justify-center text-white">
+        <img
+          src="https://images.unsplash.com/photo-1605276377073-d86e9f71e1d8?auto=format&fit=crop&w=1350&q=80"
+          alt="Serra"
+          className="absolute inset-0 w-full h-full object-cover"
+        />
+        <div className="absolute inset-0 bg-black/50" />
+        <div className="relative z-10 text-center p-4">
           <img
             src={logoUrl}
             alt="Logo Pé da Serra"
             className="w-20 h-20 object-cover rounded-full mx-auto mb-2"
           />
           <h1 className="text-3xl font-playfair mb-2">Pé da Serra</h1>
-          <p className="text-sm font-light">
-            Sabores que conectam você à natureza
-          </p>
+          <p className="text-sm font-light">Sabores que conectam você à natureza</p>
         </div>
       </section>
 
       <div
         id="menu"
-        className="sticky top-14 bg-black text-white flex overflow-x-auto no-scrollbar space-x-6 px-4 py-2 justify-center"
+        className="sticky top-16 bg-black text-white flex overflow-x-auto no-scrollbar space-x-6 px-4 py-2 justify-center z-40"
       >
         {categories.map((c) => (
           <button
@@ -263,19 +266,30 @@ export default function Landing() {
         ))}
       </main>
 
-      {cart.length > 0 && (
-        <>
-          <button
-            onClick={scrollToCart}
-            className="fixed bottom-4 right-4 bg-[#FFD700] text-black p-3 rounded-full shadow-lg z-50"
-          >
-            <ShoppingCart size={20} />
-          </button>
-          <div
-            ref={cartRef}
-            className="w-full bg-white shadow-lg p-4 pb-6 mt-4"
-          >
-            <h4 className="font-playfair mb-2 flex items-center gap-2">
+
+      <button
+        onClick={openCart}
+        className="fixed bottom-4 right-4 bg-[#FFD700] text-2xl p-3 rounded-full shadow-lg z-50"
+      >
+        🛒
+      </button>
+
+      <div
+        className={`fixed inset-0 bg-black/50 z-40 transition-opacity ${
+          drawerOpen ? "opacity-100" : "pointer-events-none opacity-0"
+        }`}
+        onClick={closeCart}
+      />
+
+      <div
+        ref={cartRef}
+        className={`fixed top-0 right-0 h-full w-full sm:w-80 bg-white shadow-lg z-50 transform transition-transform ${
+          drawerOpen ? "translate-x-0" : "translate-x-full"
+        }`}
+      >
+        <div className="p-4 pb-6 h-full flex flex-col">
+          <div className="flex justify-between items-center mb-2">
+            <h4 className="font-playfair flex items-center gap-2">
               <img
                 src={logoUrl}
                 alt="Logo Pé da Serra"
@@ -283,56 +297,64 @@ export default function Landing() {
               />
               <ShoppingCart size={18} /> Carrinho
             </h4>
-            <ul className="max-h-40 overflow-y-auto text-sm mb-2">
-              {cart.map((it) => (
-                <li
-                  key={it.id}
-                  className="mb-2 border-b pb-2 last:border-b-0 last:pb-0"
-                >
-                  <div className="flex justify-between items-center">
-                    <span className="font-medium">{it.name}</span>
-                    <div className="flex items-center space-x-1">
-                      <button onClick={() => decrease(it.id)} className="p-1">
-                        <Minus size={14} />
-                      </button>
-                      <span>{it.qty}</span>
-                      <button onClick={() => increase(it.id)} className="p-1">
-                        <Plus size={14} />
-                      </button>
-                      <button
-                        onClick={() => removeItem(it.id)}
-                        className="p-1 text-red-600"
-                      >
-                        <Trash size={14} />
-                      </button>
-                    </div>
+            <button onClick={closeCart} className="p-1">
+              <X size={18} />
+            </button>
+          </div>
+          <ul className="flex-1 overflow-y-auto text-sm mb-2">
+            {cart.length === 0 && (
+              <li className="text-center py-8 text-gray-500">Carrinho vazio</li>
+            )}
+            {cart.map((it) => (
+              <li
+                key={it.id}
+                className="mb-2 border-b pb-2 last:border-b-0 last:pb-0"
+              >
+                <div className="flex justify-between items-center">
+                  <span className="font-medium">{it.name}</span>
+                  <div className="flex items-center space-x-1">
+                    <button onClick={() => decrease(it.id)} className="p-1">
+                      <Minus size={14} />
+                    </button>
+                    <span>{it.qty}</span>
+                    <button onClick={() => increase(it.id)} className="p-1">
+                      <Plus size={14} />
+                    </button>
+                    <button
+                      onClick={() => removeItem(it.id)}
+                      className="p-1 text-red-600"
+                    >
+                      <Trash size={14} />
+                    </button>
                   </div>
-                  <input
-                    type="text"
-                    value={it.obs}
-                    onChange={(e) => updateObs(it.id, e.target.value)}
-                    placeholder="Observações"
-                    className="mt-1 w-full border rounded px-2 py-1 text-xs"
-                  />
-                  <div className="text-right text-xs mt-1">
-                    R$ {(it.price * it.qty).toFixed(2)}
-                  </div>
-                </li>
-              ))}
-            </ul>
-            <div className="flex justify-between font-bold mt-2">
+                </div>
+                <input
+                  type="text"
+                  value={it.obs}
+                  onChange={(e) => updateObs(it.id, e.target.value)}
+                  placeholder="Observações"
+                  className="mt-1 w-full border rounded px-2 py-1 text-xs"
+                />
+                <div className="text-right text-xs mt-1">
+                  R$ {(it.price * it.qty).toFixed(2)}
+                </div>
+              </li>
+            ))}
+          </ul>
+          <div className="mt-2">
+            <div className="flex justify-between font-bold mb-2">
               <span>Total</span>
               <span>R$ {total.toFixed(2)}</span>
             </div>
             <button
               onClick={openForm}
-              className="mt-2 w-full bg-[#FFD700] text-black py-2 rounded-full"
+              className="w-full bg-[#FFD700] text-black py-2 rounded-full"
             >
               Finalizar Pedido
             </button>
           </div>
-        </>
-      )}
+        </div>
+      </div>
 
       {showForm && (
         <div
@@ -506,6 +528,7 @@ export default function Landing() {
         />
         © 2025 Pé da Serra
       </footer>
+      <ToastContainer />
     </div>
   );
 }
