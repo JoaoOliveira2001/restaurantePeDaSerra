@@ -270,7 +270,7 @@ export default function Landing() {
 
       <div
         id="menu"
-        className="sticky top-16 bg-black text-white flex overflow-x-auto no-scrollbar space-x-6 px-4 py-2 justify-center z-40"
+        className="sticky top-16 bg-black text-white flex overflow-x-auto no-scrollbar space-x-6 px-4 py-2 justify-start md:justify-center z-40"
       >
         {categories.map((c) => (
           <button
@@ -322,23 +322,23 @@ export default function Landing() {
 
       <ToastContainer position="bottom-right" style={{ bottom: '5rem' }} />
 
-        <div className="fixed bottom-0 left-0 right-0 flex flex-col items-center space-y-2 bg-black text-white z-50 text-xs py-2">
-          <div className="flex justify-center">
+        <div className="fixed bottom-0 left-0 right-0 bg-black text-white z-50 text-xs py-2">
+          <div className="max-w-4xl mx-auto px-4 flex flex-col md:flex-row items-center justify-between space-y-2 md:space-y-0">
+            <div className="leading-snug text-center md:text-left">
+              <p className="font-semibold">🕒 Horários de Funcionamento</p>
+              <p>Terça a Domingo</p>
+              <p>⏰ 10h – 14h: Marmitas (Cardápio 1)</p>
+              <p>⏰ 15h – 22h: Lanches, Bebidas etc. (Cardápio 2)</p>
+              <p>❌ Fechado às segundas-feiras</p>
+            </div>
             <a
               href="https://wa.me/5511998836070?text=Ol%C3%A1%2C%20vi%20seu%20site%20e%20gostaria%20de%20fazer%20um%20or%C3%A7amento%20para%20meu%20estabelecimento"
               target="_blank"
               rel="noopener noreferrer"
-              className="bg-green-600 text-white px-3 py-2 rounded-full shadow"
+              className="bg-green-600 text-white px-3 py-2 rounded-full shadow whitespace-nowrap"
             >
               Gostou do site? Chama aí!
             </a>
-          </div>
-          <div className="leading-snug text-center">
-            <p className="font-semibold">🕒 Horários de Funcionamento</p>
-            <p>Terça a Domingo</p>
-            <p>⏰ 10h – 14h: Marmitas (Cardápio 1)</p>
-            <p>⏰ 15h – 22h: Lanches, Bebidas etc. (Cardápio 2)</p>
-            <p>❌ Fechado às segundas-feiras</p>
           </div>
         </div>
 
@@ -572,27 +572,29 @@ export default function Landing() {
 
       <footer
         id="contato"
-        className="mt-16 p-4 text-center text-sm text-gray-600 space-y-2"
+        className="mt-16 p-4 text-sm text-gray-600"
       >
-        <img
-          src={logoUrl}
-          alt="Logo Pé da Serra"
-          className="w-10 h-10 object-cover rounded-full mx-auto mb-2"
-        />
-        <div className="space-y-1">
-          <p className="font-semibold">Contact</p>
-          <p>+55 11 99811-0650</p>
-          <p>Cabreúva, SP</p>
+        <div className="max-w-4xl mx-auto flex flex-col md:flex-row items-center justify-between space-y-2 md:space-y-0">
+          <div className="flex flex-col items-center md:items-start text-center md:text-left space-y-1">
+            <img
+              src={logoUrl}
+              alt="Logo Pé da Serra"
+              className="w-10 h-10 object-cover rounded-full mb-2"
+            />
+            <p className="font-semibold">Contact</p>
+            <p>+55 11 99811-0650</p>
+            <p>Cabreúva, SP</p>
+          </div>
           <a
             href="https://wa.me/5511998836070?text=Ol%C3%A1%2C%20vi%20seu%20site%20e%20gostaria%20de%20fazer%20um%20or%C3%A7amento%20para%20meu%20estabelecimento"
             target="_blank"
             rel="noopener noreferrer"
-            className="text-green-600 underline font-medium"
+            className="text-green-600 underline font-medium whitespace-nowrap"
           >
             Gostou do site? Chama aí!
           </a>
         </div>
-        <p className="mt-2">© 2025 Pé da Serra</p>
+        <p className="text-center mt-2">© 2025 Pé da Serra</p>
       </footer>
     </div>
   );
