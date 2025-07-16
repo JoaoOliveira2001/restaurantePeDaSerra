@@ -19,13 +19,20 @@ const freteOptions = [
 export default function Landing() {
   const categories = [
     { key: "lanche", label: "Lanches" },
+    { key: "marmita", label: "Marmitas" },
     { key: "combo", label: "Combos" },
     { key: "porção", label: "Porções" },
     { key: "bebida", label: "Bebidas" },
   ];
 
   const [active, setActive] = useState("lanche");
-  const [menu, setMenu] = useState({ lanche: [], combo: [], "porção": [], bebida: [] });
+  const [menu, setMenu] = useState({
+    lanche: [],
+    marmita: [],
+    combo: [],
+    "porção": [],
+    bebida: [],
+  });
   const [cart, setCart] = useState([]);
   const cartRef = useRef(null);
   const formRef = useRef(null);
@@ -34,12 +41,10 @@ export default function Landing() {
   const [form, setForm] = useState({
     nome: "",
     telefone: "",
-    cep: "",
     rua: "",
     numero: "",
     complemento: "",
     bairro: "",
-    cidade: "",
     recebimento: "entrega",
     frete: "",
     pagamento: "dinheiro",
@@ -56,6 +61,7 @@ export default function Landing() {
       .then((items) => {
         setMenu({
           lanche: items.filter((i) => i.type === "lanche"),
+          marmita: items.filter((i) => i.type === "marmita"),
           combo: items.filter((i) => i.type === "combo"),
           "porção": items.filter((i) => i.type === "porção"),
           bebida: items.filter((i) => i.type === "bebida"),
@@ -119,7 +125,7 @@ export default function Landing() {
 
     const endereco =
       form.recebimento === "entrega"
-        ? `${form.rua}, ${form.numero}${form.complemento ? ' - ' + form.complemento : ''}, ${form.bairro}, ${form.cidade}, ${form.cep}`
+        ? `${form.rua}, ${form.numero}${form.complemento ? ' - ' + form.complemento : ''}, ${form.bairro}`
         : "Retirada no local";
 
     const produtos = cart
@@ -316,6 +322,24 @@ export default function Landing() {
 
       <ToastContainer position="bottom-right" style={{ bottom: '5rem' }} />
 
+      <div className="fixed bottom-4 left-4 flex flex-col items-start space-y-2 z-50 text-xs">
+        <a
+          href="https://wa.me/5511998836070?text=Ol%C3%A1%2C%20vi%20seu%20site%20e%20gostaria%20de%20fazer%20um%20or%C3%A7amento%20para%20meu%20estabelecimento"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="bg-green-600 text-white px-3 py-2 rounded-full shadow"
+        >
+          Gostou do site? Chama aí!
+        </a>
+        <div className="bg-white/90 p-2 rounded shadow text-left leading-snug">
+          <p className="font-semibold">🕒 Opening Hours</p>
+          <p>Tuesday to Sunday</p>
+          <p>⏰ 10 AM – 2 PM: Marmitas (Menu 1)</p>
+          <p>⏰ 3 PM – 10 PM: Snacks, Drinks, etc. (Menu 2)</p>
+          <p>❌ Closed on Mondays</p>
+        </div>
+      </div>
+
       <button
         onClick={openCart}
         className="fixed bottom-4 right-4 bg-[#FFD700] text-2xl p-3 rounded-full shadow-lg z-50"
@@ -453,14 +477,6 @@ export default function Landing() {
                 <legend className="font-semibold mb-2">Endereço de entrega</legend>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <input
-                    name="cep"
-                    value={form.cep}
-                    onChange={handleChange}
-                    placeholder="CEP"
-                    required
-                    className="border p-2 rounded"
-                  />
-                  <input
                     name="rua"
                     value={form.rua}
                     onChange={handleChange}
@@ -488,14 +504,6 @@ export default function Landing() {
                     value={form.bairro}
                     onChange={handleChange}
                     placeholder="Bairro"
-                    required
-                    className="border p-2 rounded"
-                  />
-                  <input
-                    name="cidade"
-                    value={form.cidade}
-                    onChange={handleChange}
-                    placeholder="Cidade"
                     required
                     className="border p-2 rounded"
                   />
@@ -562,14 +570,27 @@ export default function Landing() {
 
       <footer
         id="contato"
-        className="mt-16 p-4 text-center text-sm text-gray-600"
+        className="mt-16 p-4 text-center text-sm text-gray-600 space-y-2"
       >
         <img
           src={logoUrl}
           alt="Logo Pé da Serra"
           className="w-10 h-10 object-cover rounded-full mx-auto mb-2"
         />
-        © 2025 Pé da Serra
+        <div className="space-y-1">
+          <p className="font-semibold">Contact</p>
+          <p>+55 11 99811-0650</p>
+          <p>Cabreúva, SP</p>
+          <a
+            href="https://wa.me/5511998836070?text=Ol%C3%A1%2C%20vi%20seu%20site%20e%20gostaria%20de%20fazer%20um%20or%C3%A7amento%20para%20meu%20estabelecimento"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-green-600 underline font-medium"
+          >
+            Gostou do site? Chama aí!
+          </a>
+        </div>
+        <p className="mt-2">© 2025 Pé da Serra</p>
       </footer>
     </div>
   );
