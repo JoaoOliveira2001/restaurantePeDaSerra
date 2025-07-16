@@ -28,13 +28,16 @@ export default function Landing() {
   ];
 
   const [active, setActive] = useState("lanche");
-  const activeCategory = active === "marmita" ? "marmitas" : active === "lanche" ? "lanches" : null;
-  const categoryAvailable = activeCategory ? checkAvailability(activeCategory) : true;
+  const activeCategory =
+    active === "marmita" ? "marmitas" : active === "lanche" ? "lanches" : null;
+  const categoryAvailable = activeCategory
+    ? checkAvailability(activeCategory)
+    : true;
   const [menu, setMenu] = useState({
     lanche: [],
     marmita: [],
     combo: [],
-    "porção": [],
+    porção: [],
     bebida: [],
   });
   const [cart, setCart] = useState([]);
@@ -57,7 +60,7 @@ export default function Landing() {
   });
 
   useEffect(() => {
-    fetch('/api/cardapio')
+    fetch("/api/cardapio")
       .then((res) => {
         if (!res.ok) throw new Error(`HTTP error ${res.status}`);
         return res.json();
@@ -65,13 +68,13 @@ export default function Landing() {
       .then((items) => {
         const normalized = items.map((it) => ({
           ...it,
-          price: Number(String(it.price).replace(',', '.')),
+          price: Number(String(it.price).replace(",", ".")),
         }));
         setMenu({
           lanche: normalized.filter((i) => i.type === "lanche"),
           marmita: normalized.filter((i) => i.type === "marmita"),
           combo: normalized.filter((i) => i.type === "combo"),
-          "porção": normalized.filter((i) => i.type === "porção"),
+          porção: normalized.filter((i) => i.type === "porção"),
           bebida: normalized.filter((i) => i.type === "bebida"),
         });
       })
@@ -103,9 +106,7 @@ export default function Landing() {
   const decrease = (id) => {
     setCart((prev) =>
       prev
-        .map((i) =>
-          i.id === id ? { ...i, qty: i.qty - 1 } : i
-        )
+        .map((i) => (i.id === id ? { ...i, qty: i.qty - 1 } : i))
         .filter((i) => i.qty > 0)
     );
   };
@@ -115,9 +116,7 @@ export default function Landing() {
   };
 
   const updateObs = (id, text) => {
-    setCart((prev) =>
-      prev.map((i) => (i.id === id ? { ...i, obs: text } : i))
-    );
+    setCart((prev) => prev.map((i) => (i.id === id ? { ...i, obs: text } : i)));
   };
 
   const handleChange = (e) => {
@@ -133,7 +132,9 @@ export default function Landing() {
 
     const endereco =
       form.recebimento === "entrega"
-        ? `${form.rua}, ${form.numero}${form.complemento ? ' - ' + form.complemento : ''}, ${form.bairro}`
+        ? `${form.rua}, ${form.numero}${
+            form.complemento ? " - " + form.complemento : ""
+          }, ${form.bairro}`
         : "Retirada no local";
 
     const produtos = cart
@@ -144,7 +145,9 @@ export default function Landing() {
       .filter((i) => i.type !== "bebida")
       .map(
         (i) =>
-          `* ${i.name} (${i.qty}x)${i.obs ? ` - Obs: ${i.obs}` : ""} - R$ ${(i.price * i.qty).toFixed(2)}`
+          `* ${i.name} (${i.qty}x)${i.obs ? ` - Obs: ${i.obs}` : ""} - R$ ${(
+            i.price * i.qty
+          ).toFixed(2)}`
       )
       .join("\n");
 
@@ -152,7 +155,9 @@ export default function Landing() {
       .filter((i) => i.type === "bebida")
       .map(
         (i) =>
-          `* ${i.name} (${i.qty}x)${i.obs ? ` - Obs: ${i.obs}` : ""} - R$ ${(i.price * i.qty).toFixed(2)}`
+          `* ${i.name} (${i.qty}x)${i.obs ? ` - Obs: ${i.obs}` : ""} - R$ ${(
+            i.price * i.qty
+          ).toFixed(2)}`
       )
       .join("\n");
 
@@ -193,11 +198,15 @@ export default function Landing() {
       `*Itens:*\n${itensList}` +
       (bebidasList ? `\n\n*Bebidas:*\n${bebidasList}` : "") +
       `\n\n*Pagamento:* ${pagamentoMsg}\n` +
-      (form.observacoes ? `\n*Observações Gerais:*\n${form.observacoes}\n` : "") +
-      `\n*Total:* R$ ${(totalItens + frete).toFixed(2)}\n Por favor, confirme meu pedido!`;
+      (form.observacoes
+        ? `\n*Observações Gerais:*\n${form.observacoes}\n`
+        : "") +
+      `\n*Total:* R$ ${(totalItens + frete).toFixed(
+        2
+      )}\n Por favor, confirme meu pedido!`;
 
     window.open(
-      `https://wa.me/5511998341875?text=${encodeURIComponent(msg)}`,
+      `https://wa.me/+5511998836070?text=${encodeURIComponent(msg)}`,
       "_blank"
     );
 
@@ -258,7 +267,10 @@ export default function Landing() {
         </div>
       </header>
 
-      <section id="inicio" className="relative h-60 flex items-center justify-center text-white">
+      <section
+        id="inicio"
+        className="relative h-60 flex items-center justify-center text-white"
+      >
         <img
           src="https://i.imgur.com/DbVYSxW.png"
           alt="Serra"
@@ -272,7 +284,9 @@ export default function Landing() {
             className="w-20 h-20 object-cover rounded-full mx-auto mb-2"
           />
           <h1 className="text-3xl font-playfair mb-2">Pé da Serra</h1>
-          <p className="text-sm font-light">Sabores que conectam você à natureza</p>
+          <p className="text-sm font-light">
+            Sabores que conectam você à natureza
+          </p>
         </div>
       </section>
 
@@ -297,40 +311,37 @@ export default function Landing() {
         <AvailabilityNotice category={activeCategory} />
         {categoryAvailable &&
           menu[active].map((item) => (
-          <div
-            key={item.id}
-            className="bg-white rounded-lg shadow overflow-hidden"
-          >
-            <img
-              src={item.image}
-              alt={item.name}
-              className="h-40 w-full object-cover"
-            />
-            <div className="p-4">
-              <h3 className="font-playfair text-lg">{item.name}</h3>
-              {item.description && (
-                <p className="text-sm text-gray-600 mb-2">
-                  {item.description}
-                </p>
-              )}
-              <div className="flex justify-between items-center">
-                <span className="font-bold">
-                  R$ {item.price.toFixed(2)}
-                </span>
-                <button
-                  onClick={() => addToCart(item)}
-                  className="bg-[#FFD700] text-black px-3 py-1 rounded-full shadow"
-                >
-                  Adicionar
-                </button>
+            <div
+              key={item.id}
+              className="bg-white rounded-lg shadow overflow-hidden"
+            >
+              <img
+                src={item.image}
+                alt={item.name}
+                className="h-40 w-full object-cover"
+              />
+              <div className="p-4">
+                <h3 className="font-playfair text-lg">{item.name}</h3>
+                {item.description && (
+                  <p className="text-sm text-gray-600 mb-2">
+                    {item.description}
+                  </p>
+                )}
+                <div className="flex justify-between items-center">
+                  <span className="font-bold">R$ {item.price.toFixed(2)}</span>
+                  <button
+                    onClick={() => addToCart(item)}
+                    className="bg-[#FFD700] text-black px-3 py-1 rounded-full shadow"
+                  >
+                    Adicionar
+                  </button>
+                </div>
               </div>
             </div>
-          </div>
-        ))}
+          ))}
       </main>
 
-
-      <ToastContainer position="bottom-right" style={{ bottom: '5rem' }} />
+      <ToastContainer position="bottom-right" style={{ bottom: "5rem" }} />
 
       <button
         onClick={openCart}
@@ -431,7 +442,9 @@ export default function Landing() {
             alt="Logo Pé da Serra"
             className="w-16 h-16 object-cover rounded-full mx-auto mb-4"
           />
-          <h2 className="text-xl font-bold mb-4 text-center">Finalizar Pedido</h2>
+          <h2 className="text-xl font-bold mb-4 text-center">
+            Finalizar Pedido
+          </h2>
           <form onSubmit={handleSubmit} className="space-y-4">
             <fieldset>
               <legend className="font-semibold mb-2">Dados do cliente</legend>
@@ -466,7 +479,9 @@ export default function Landing() {
 
             {form.recebimento === "entrega" && (
               <fieldset>
-                <legend className="font-semibold mb-2">Endereço de entrega</legend>
+                <legend className="font-semibold mb-2">
+                  Endereço de entrega
+                </legend>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <input
                     name="rua"
@@ -504,7 +519,9 @@ export default function Landing() {
             )}
 
             <fieldset>
-              <legend className="font-semibold mb-2">Informações do pedido</legend>
+              <legend className="font-semibold mb-2">
+                Informações do pedido
+              </legend>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <select
                   name="pagamento"
