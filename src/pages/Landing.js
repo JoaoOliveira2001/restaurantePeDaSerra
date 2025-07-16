@@ -130,7 +130,9 @@ export default function Landing() {
       .filter((i) => i.type !== "bebida")
       .map(
         (i) =>
-          `* ${i.name} (${i.qty}x) - R$ ${(i.price * i.qty).toFixed(2)}`
+          `* ${i.name} (${i.qty}x) - R$ ${(i.price * i.qty).toFixed(2)}${
+            i.obs ? " - " + i.obs : ""
+          }`
       )
       .join("\n");
 
@@ -138,7 +140,9 @@ export default function Landing() {
       .filter((i) => i.type === "bebida")
       .map(
         (i) =>
-          `* ${i.name} (${i.qty}x) - R$ ${(i.price * i.qty).toFixed(2)}`
+          `* ${i.name} (${i.qty}x) - R$ ${(i.price * i.qty).toFixed(2)}${
+            i.obs ? " - " + i.obs : ""
+          }`
       )
       .join("\n");
 
@@ -184,17 +188,25 @@ export default function Landing() {
           ? `Dinheiro (troco para ${form.troco})`
           : form.pagamento.charAt(0).toUpperCase() + form.pagamento.slice(1);
 
+      const enderecoMsg =
+        form.recebimento === "entrega"
+          ? `*Endereço:* ${form.rua}, ${form.numero} - ${form.bairro}, ${form.cidade}\n`
+          : `*Retirada no local*\n`;
+
       const msg =
-        `Cliente: ${form.nome}\n` +
-        `Telefone: ${form.telefone}\n` +
-        `Endereço: ${form.rua}, ${form.numero} - ${form.bairro}, ${form.cidade}\n` +
-        (form.complemento ? `Complemento: ${form.complemento}\n` : "") +
-        "\nItens:\n" +
+        `*Cliente:* ${form.nome}\n` +
+        `*Telefone:* ${form.telefone}\n` +
+        enderecoMsg +
+        (form.complemento && form.recebimento === "entrega"
+          ? `*Complemento:* ${form.complemento}\n`
+          : "") +
+        `*Valor do frete:* R$ ${frete.toFixed(2)}\n` +
+        "\n*Itens:*\n" +
         itensList +
-        (bebidasList ? `\n\nBebidas:\n${bebidasList}` : "") +
-        `\n\nPagamento: ${pagamentoMsg}\n` +
-        (form.observacoes ? `\nObservações Gerais:\n${form.observacoes}\n` : "") +
-        `\nTotal: R$ ${(totalItens + frete).toFixed(2)}\n Por favor, confirme meu pedido!`;
+        (bebidasList ? `\n\n*Bebidas:*\n${bebidasList}` : "") +
+        `\n\n*Pagamento:* ${pagamentoMsg}\n` +
+        (form.observacoes ? `\n*Observações Gerais:*\n${form.observacoes}\n` : "") +
+        `\n*Total:* R$ ${(totalItens + frete).toFixed(2)}\n Por favor, confirme meu pedido!`;
       window.open(
         `https://wa.me/5511998341875?text=${encodeURIComponent(msg)}`,
         "_blank"
