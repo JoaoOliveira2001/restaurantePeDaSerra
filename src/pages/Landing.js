@@ -32,6 +32,7 @@ export default function Landing() {
     active === "marmita" ? "marmitas" : active === "lanche" ? "lanches" : null;
   const isAvailable =
     activeCategory ? checkAvailability(activeCategory) : true;
+  const activeCategory = active === "marmita" ? "marmitas" : active === "lanche" ? "lanches" : null;
   const [menu, setMenu] = useState({
     lanche: [],
     marmita: [],
@@ -65,12 +66,16 @@ export default function Landing() {
         return res.json();
       })
       .then((items) => {
+        const normalized = items.map((it) => ({
+          ...it,
+          price: Number(String(it.price).replace(',', '.')),
+        }));
         setMenu({
-          lanche: items.filter((i) => i.type === "lanche"),
-          marmita: items.filter((i) => i.type === "marmita"),
-          combo: items.filter((i) => i.type === "combo"),
-          "porção": items.filter((i) => i.type === "porção"),
-          bebida: items.filter((i) => i.type === "bebida"),
+          lanche: normalized.filter((i) => i.type === "lanche"),
+          marmita: normalized.filter((i) => i.type === "marmita"),
+          combo: normalized.filter((i) => i.type === "combo"),
+          "porção": normalized.filter((i) => i.type === "porção"),
+          bebida: normalized.filter((i) => i.type === "bebida"),
         });
       })
       .catch(console.error);
@@ -298,6 +303,11 @@ export default function Landing() {
             <div
               key={item.id}
               className="bg-white rounded-lg shadow overflow-hidden"
+=======
+        {menu[active].map((item) => (
+          <div
+            key={item.id}
+            className="bg-white rounded-lg shadow overflow-hidden"
           >
             <img
               src={item.image}
