@@ -3,6 +3,19 @@ import { ShoppingCart, Plus, Minus, Trash, X } from "lucide-react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
+const freteOptions = [
+  { label: "Pinhal – R$ 10,00", value: 10 },
+  { label: "Vilareijo – R$ 5,00", value: 5 },
+  { label: "Condominio – R$ 8,00", value: 8 },
+  { label: "Cururu – R$ 7,00", value: 7 },
+  { label: "Colina – R$ 4,00", value: 4 },
+  { label: "Jacaré – R$ 4,00", value: 4 },
+  { label: "Caí – R$ 10,00", value: 10 },
+  { label: "Bonfim – R$ 6,00", value: 6 },
+  { label: "Cabreúva – R$ 20,00", value: 20 },
+  { label: "Novo Bonfim – R$ 6,00", value: 6 },
+];
+
 export default function Landing() {
   const categories = [
     { key: "lanche", label: "Lanches" },
@@ -27,7 +40,6 @@ export default function Landing() {
     complemento: "",
     bairro: "",
     cidade: "",
-    estado: "",
     recebimento: "entrega",
     frete: "",
     pagamento: "dinheiro",
@@ -107,12 +119,28 @@ export default function Landing() {
 
     const endereco =
       form.recebimento === "entrega"
-        ? `${form.rua}, ${form.numero}${form.complemento ? ' - ' + form.complemento : ''}, ${form.bairro}, ${form.cidade} - ${form.estado}, ${form.cep}`
+        ? `${form.rua}, ${form.numero}${form.complemento ? ' - ' + form.complemento : ''}, ${form.bairro}, ${form.cidade}, ${form.cep}`
         : "Retirada no local";
 
     const produtos = cart
       .map((i) => `${i.name} x${i.qty}${i.obs ? " (" + i.obs + ")" : ""}`)
       .join(", ");
+
+    const itensList = cart
+      .filter((i) => i.type !== "bebida")
+      .map(
+        (i) =>
+          `* ${i.name} (${i.qty}x) - R$ ${(i.price * i.qty).toFixed(2)}`
+      )
+      .join("\n");
+
+    const bebidasList = cart
+      .filter((i) => i.type === "bebida")
+      .map(
+        (i) =>
+          `* ${i.name} (${i.qty}x) - R$ ${(i.price * i.qty).toFixed(2)}`
+      )
+      .join("\n");
 
     const quantidade = cart.reduce((t, i) => t + i.qty, 0);
     const totalItens = cart.reduce((t, i) => t + i.price * i.qty, 0);
@@ -151,19 +179,22 @@ export default function Landing() {
       alert("Pedido enviado com sucesso!");
       setCart([]);
       setShowForm(false);
+      const pagamentoMsg =
+        form.pagamento === "dinheiro" && form.troco
+          ? `Dinheiro (troco para ${form.troco})`
+          : form.pagamento.charAt(0).toUpperCase() + form.pagamento.slice(1);
+
       const msg =
-        `Olá, gostaria de fazer o pedido ${id}.\n` +
-        `Itens: ${produtos}\n` +
-        `Total: R$ ${(totalItens + frete).toFixed(2)}\n` +
-        `Nome: ${form.nome}\n` +
+        `Cliente: ${form.nome}\n` +
         `Telefone: ${form.telefone}\n` +
-        `Endereço: ${endereco}\n` +
-        `Pagamento: ${
-          form.pagamento === "dinheiro" && form.troco
-            ? `Dinheiro (troco para ${form.troco})`
-            : form.pagamento
-        }` +
-        (form.observacoes ? `\nObs: ${form.observacoes}` : "");
+        `Endereço: ${form.rua}, ${form.numero} - ${form.bairro}, ${form.cidade}\n` +
+        (form.complemento ? `Complemento: ${form.complemento}\n` : "") +
+        "\nItens:\n" +
+        itensList +
+        (bebidasList ? `\n\nBebidas:\n${bebidasList}` : "") +
+        `\n\nPagamento: ${pagamentoMsg}\n` +
+        (form.observacoes ? `\nObservações Gerais:\n${form.observacoes}\n` : "") +
+        `\nTotal: R$ ${(totalItens + frete).toFixed(2)}\n Por favor, confirme meu pedido!`;
       window.open(
         `https://wa.me/5511998341875?text=${encodeURIComponent(msg)}`,
         "_blank"
@@ -466,14 +497,6 @@ export default function Landing() {
                     required
                     className="border p-2 rounded"
                   />
-                  <input
-                    name="estado"
-                    value={form.estado}
-                    onChange={handleChange}
-                    placeholder="Estado"
-                    required
-                    className="border p-2 rounded"
-                  />
                 </div>
               </fieldset>
             )}
@@ -508,9 +531,11 @@ export default function Landing() {
                     className="border p-2 rounded"
                   >
                     <option value="">Escolha o frete</option>
-                    <option value="5">R$ 5</option>
-                    <option value="10">R$ 10</option>
-                    <option value="15">R$ 15</option>
+                    {freteOptions.map((f) => (
+                      <option key={f.label} value={f.value}>
+                        {f.label}
+                      </option>
+                    ))}
                   </select>
                 )}
                 <textarea
