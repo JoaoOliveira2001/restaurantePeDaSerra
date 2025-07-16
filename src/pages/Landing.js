@@ -322,23 +322,23 @@ export default function Landing() {
 
       <ToastContainer position="bottom-right" style={{ bottom: '5rem' }} />
 
-      <div className="fixed bottom-4 left-4 flex flex-col items-start space-y-2 z-50 text-xs">
-        <a
-          href="https://wa.me/5511998836070?text=Ol%C3%A1%2C%20vi%20seu%20site%20e%20gostaria%20de%20fazer%20um%20or%C3%A7amento%20para%20meu%20estabelecimento"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="bg-green-600 text-white px-3 py-2 rounded-full shadow"
-        >
-          Gostou do site? Chama aí!
-        </a>
-        <div className="bg-white/90 p-2 rounded shadow text-left leading-snug">
-          <p className="font-semibold">🕒 Opening Hours</p>
-          <p>Tuesday to Sunday</p>
-          <p>⏰ 10 AM – 2 PM: Marmitas (Menu 1)</p>
-          <p>⏰ 3 PM – 10 PM: Snacks, Drinks, etc. (Menu 2)</p>
-          <p>❌ Closed on Mondays</p>
+        <div className="fixed bottom-4 left-4 flex flex-col items-start space-y-2 z-50 text-xs">
+          <a
+            href="https://wa.me/5511998836070?text=Ol%C3%A1%2C%20vi%20seu%20site%20e%20gostaria%20de%20fazer%20um%20or%C3%A7amento%20para%20meu%20estabelecimento"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="bg-green-600 text-white px-3 py-2 rounded-full shadow"
+          >
+            Gostou do site? Chama aí!
+          </a>
+          <div className="bg-white/90 p-2 rounded shadow text-left leading-snug">
+            <p className="font-semibold">🕒 Horários de Funcionamento</p>
+            <p>Terça a Domingo</p>
+            <p>⏰ 10h – 14h: Marmitas (Cardápio 1)</p>
+            <p>⏰ 15h – 22h: Lanches, Bebidas etc. (Cardápio 2)</p>
+            <p>❌ Fechado às segundas-feiras</p>
+          </div>
         </div>
-      </div>
 
       <button
         onClick={openCart}
