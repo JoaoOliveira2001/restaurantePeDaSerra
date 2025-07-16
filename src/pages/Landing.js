@@ -111,7 +111,7 @@ export default function Landing() {
     setForm((f) => ({ ...f, [name]: value }));
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
 
     const id = Math.random().toString(36).substr(2, 9).toUpperCase();
@@ -130,7 +130,7 @@ export default function Landing() {
       .filter((i) => i.type !== "bebida")
       .map(
         (i) =>
-          `* ${i.name} (${i.qty}x) - R$ ${(i.price * i.qty).toFixed(2)}`
+          `* ${i.name} (${i.qty}x)${i.obs ? ` - Obs: ${i.obs}` : ""} - R$ ${(i.price * i.qty).toFixed(2)}`
       )
       .join("\n");
 
@@ -138,7 +138,7 @@ export default function Landing() {
       .filter((i) => i.type === "bebida")
       .map(
         (i) =>
-          `* ${i.name} (${i.qty}x) - R$ ${(i.price * i.qty).toFixed(2)}`
+          `* ${i.name} (${i.qty}x)${i.obs ? ` - Obs: ${i.obs}` : ""} - R$ ${(i.price * i.qty).toFixed(2)}`
       )
       .join("\n");
 
@@ -164,45 +164,47 @@ export default function Landing() {
       observacoes: form.observacoes,
     };
 
-    try {
-      const response = await fetch("/api/enviar-pedido", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(pedido),
+    const pagamentoMsg =
+      form.pagamento === "dinheiro" && form.troco
+        ? `Dinheiro (troco para ${form.troco})`
+        : form.pagamento.charAt(0).toUpperCase() + form.pagamento.slice(1);
+
+    const enderecoMsg = endereco;
+
+    const msg =
+      `*Cliente:* ${form.nome}\n` +
+      `*Telefone:* ${form.telefone}\n` +
+      `*Endereço:* ${enderecoMsg}\n` +
+      `*Valor do frete:* R$ ${frete.toFixed(2)}\n\n` +
+      `*Itens:*\n${itensList}` +
+      (bebidasList ? `\n\n*Bebidas:*\n${bebidasList}` : "") +
+      `\n\n*Pagamento:* ${pagamentoMsg}\n` +
+      (form.observacoes ? `\n*Observações Gerais:*\n${form.observacoes}\n` : "") +
+      `\n*Total:* R$ ${(totalItens + frete).toFixed(2)}\n Por favor, confirme meu pedido!`;
+
+    window.open(
+      `https://wa.me/5511998341875?text=${encodeURIComponent(msg)}`,
+      "_blank"
+    );
+
+    fetch("/api/enviar-pedido", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(pedido),
+    })
+      .then(async (response) => {
+        if (!response.ok) {
+          const text = await response.text();
+          throw new Error(text || "Erro ao enviar pedido");
+        }
+        alert("Pedido enviado com sucesso!");
+        setCart([]);
+        setShowForm(false);
+      })
+      .catch((err) => {
+        console.error("Falha ao enviar pedido:", err);
+        alert("Erro ao enviar pedido");
       });
-
-      if (!response.ok) {
-        const text = await response.text();
-        throw new Error(text || "Erro ao enviar pedido");
-      }
-
-      alert("Pedido enviado com sucesso!");
-      setCart([]);
-      setShowForm(false);
-      const pagamentoMsg =
-        form.pagamento === "dinheiro" && form.troco
-          ? `Dinheiro (troco para ${form.troco})`
-          : form.pagamento.charAt(0).toUpperCase() + form.pagamento.slice(1);
-
-      const msg =
-        `Cliente: ${form.nome}\n` +
-        `Telefone: ${form.telefone}\n` +
-        `Endereço: ${form.rua}, ${form.numero} - ${form.bairro}, ${form.cidade}\n` +
-        (form.complemento ? `Complemento: ${form.complemento}\n` : "") +
-        "\nItens:\n" +
-        itensList +
-        (bebidasList ? `\n\nBebidas:\n${bebidasList}` : "") +
-        `\n\nPagamento: ${pagamentoMsg}\n` +
-        (form.observacoes ? `\nObservações Gerais:\n${form.observacoes}\n` : "") +
-        `\nTotal: R$ ${(totalItens + frete).toFixed(2)}\n Por favor, confirme meu pedido!`;
-      window.open(
-        `https://wa.me/5511998341875?text=${encodeURIComponent(msg)}`,
-        "_blank"
-      );
-    } catch (err) {
-      console.error("Falha ao enviar pedido:", err);
-      alert("Erro ao enviar pedido");
-    }
   };
 
   const total = cart.reduce((t, i) => t + i.price * i.qty, 0);
