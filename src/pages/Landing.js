@@ -3,6 +3,7 @@ import { ShoppingCart, Plus, Minus, Trash, X } from "lucide-react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import AvailabilityNotice from "../components/AvailabilityNotice";
+import { checkAvailability } from "../utils/schedule";
 
 const freteOptions = [
   { label: "Pinhal – R$ 10,00", value: 10 },
@@ -27,6 +28,10 @@ export default function Landing() {
   ];
 
   const [active, setActive] = useState("lanche");
+  const activeCategory =
+    active === "marmita" ? "marmitas" : active === "lanche" ? "lanches" : null;
+  const isAvailable =
+    activeCategory ? checkAvailability(activeCategory) : true;
   const activeCategory = active === "marmita" ? "marmitas" : active === "lanche" ? "lanches" : null;
   const [menu, setMenu] = useState({
     lanche: [],
@@ -293,6 +298,12 @@ export default function Landing() {
 
       <main className="max-w-4xl mx-auto p-4 space-y-4 pt-2">
         <AvailabilityNotice category={activeCategory} />
+        {isAvailable &&
+          menu[active].map((item) => (
+            <div
+              key={item.id}
+              className="bg-white rounded-lg shadow overflow-hidden"
+=======
         {menu[active].map((item) => (
           <div
             key={item.id}
