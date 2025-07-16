@@ -322,16 +322,18 @@ export default function Landing() {
 
       <ToastContainer position="bottom-right" style={{ bottom: '5rem' }} />
 
-        <div className="fixed bottom-4 left-4 flex flex-col items-start space-y-2 z-50 text-xs">
-          <a
-            href="https://wa.me/5511998836070?text=Ol%C3%A1%2C%20vi%20seu%20site%20e%20gostaria%20de%20fazer%20um%20or%C3%A7amento%20para%20meu%20estabelecimento"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="bg-green-600 text-white px-3 py-2 rounded-full shadow"
-          >
-            Gostou do site? Chama aí!
-          </a>
-          <div className="bg-white/90 p-2 rounded shadow text-left leading-snug">
+        <div className="fixed bottom-0 left-0 right-0 flex flex-col items-center space-y-2 bg-black text-white z-50 text-xs py-2">
+          <div className="flex justify-center">
+            <a
+              href="https://wa.me/5511998836070?text=Ol%C3%A1%2C%20vi%20seu%20site%20e%20gostaria%20de%20fazer%20um%20or%C3%A7amento%20para%20meu%20estabelecimento"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="bg-green-600 text-white px-3 py-2 rounded-full shadow"
+            >
+              Gostou do site? Chama aí!
+            </a>
+          </div>
+          <div className="leading-snug text-center">
             <p className="font-semibold">🕒 Horários de Funcionamento</p>
             <p>Terça a Domingo</p>
             <p>⏰ 10h – 14h: Marmitas (Cardápio 1)</p>
