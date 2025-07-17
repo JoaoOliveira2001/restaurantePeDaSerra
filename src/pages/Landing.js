@@ -14,7 +14,8 @@ const freteOptions = [
   { label: "Jacaré – R$ 4,00", value: 4 },
   { label: "Caí – R$ 10,00", value: 10 },
   { label: "Bonfim – R$ 6,00", value: 6 },
-  { label: "Cabreúva – R$ 20,00", value: 20 },
+  { label: "Camping Cabreúva – R$ 15,00", value: 15 },
+  { label: "Cabreúva – R$ 25,00", value: 25 },
   { label: "Novo Bonfim – R$ 6,00", value: 6 },
 ];
 
@@ -25,6 +26,7 @@ export default function Landing() {
     { key: "combo", label: "Combos" },
     { key: "porção", label: "Porções" },
     { key: "bebida", label: "Bebidas" },
+    { key: "outros", label: "Outros" },
   ];
 
   const [active, setActive] = useState("lanche");
