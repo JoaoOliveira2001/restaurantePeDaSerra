@@ -5,18 +5,19 @@ import "react-toastify/dist/ReactToastify.css";
 import AvailabilityNotice from "../components/AvailabilityNotice";
 import { checkAvailability } from "../utils/schedule";
 
+// 'value' holds a unique key for the option while 'price' stores the fee
 const freteOptions = [
-  { label: "Pinhal – R$ 10,00", value: 10 },
-  { label: "Vilareijo – R$ 5,00", value: 5 },
-  { label: "Condominio – R$ 8,00", value: 8 },
-  { label: "Cururu – R$ 7,00", value: 7 },
-  { label: "Colina – R$ 4,00", value: 4 },
-  { label: "Jacaré – R$ 4,00", value: 4 },
-  { label: "Caí – R$ 10,00", value: 10 },
-  { label: "Bonfim – R$ 6,00", value: 6 },
-  { label: "Camping Cabreúva – R$ 15,00", value: 15 },
-  { label: "Cabreúva – R$ 25,00", value: 25 },
-  { label: "Novo Bonfim – R$ 6,00", value: 6 },
+  { value: "pinhal", label: "Pinhal – R$ 10,00", price: 10 },
+  { value: "vilareijo", label: "Vilareijo – R$ 5,00", price: 5 },
+  { value: "condominio", label: "Condominio – R$ 8,00", price: 8 },
+  { value: "cururu", label: "Cururu – R$ 7,00", price: 7 },
+  { value: "colina", label: "Colina – R$ 4,00", price: 4 },
+  { value: "jacare", label: "Jacaré – R$ 4,00", price: 4 },
+  { value: "cai", label: "Caí – R$ 10,00", price: 10 },
+  { value: "bonfim", label: "Bonfim – R$ 6,00", price: 6 },
+  { value: "camping_cabreuva", label: "Camping Cabreúva – R$ 15,00", price: 15 },
+  { value: "cabreuva", label: "Cabreúva – R$ 25,00", price: 25 },
+  { value: "novo_bonfim", label: "Novo Bonfim – R$ 6,00", price: 6 },
 ];
 
 export default function Landing() {
@@ -165,7 +166,8 @@ export default function Landing() {
 
     const quantidade = cart.reduce((t, i) => t + i.qty, 0);
     const totalItens = cart.reduce((t, i) => t + i.price * i.qty, 0);
-    const frete = Number(form.frete || 0);
+    const freteObj = freteOptions.find((f) => f.value === form.frete);
+    const frete = freteObj ? freteObj.price : 0;
 
     const pedido = {
       id,
@@ -208,7 +210,7 @@ export default function Landing() {
       )}\n Por favor, confirme meu pedido!`;
 
     window.open(
-      `https://wa.me/+5511998836070?text=${encodeURIComponent(msg)}`,
+      `https://wa.me/+5511998110650?text=${encodeURIComponent(msg)}`,
       "_blank"
     );
 
@@ -553,7 +555,7 @@ export default function Landing() {
                   >
                     <option value="">Escolha o frete</option>
                     {freteOptions.map((f) => (
-                      <option key={f.label} value={f.value}>
+                      <option key={f.value} value={f.value}>
                         {f.label}
                       </option>
                     ))}
