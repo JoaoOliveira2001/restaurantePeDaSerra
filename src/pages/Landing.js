@@ -42,6 +42,7 @@ export default function Landing() {
     combo: [],
     porção: [],
     bebida: [],
+    outros: [],
   });
   const [cart, setCart] = useState([]);
   const cartRef = useRef(null);
@@ -79,6 +80,7 @@ export default function Landing() {
           combo: normalized.filter((i) => i.type === "combo"),
           porção: normalized.filter((i) => i.type === "porção"),
           bebida: normalized.filter((i) => i.type === "bebida"),
+          outros: normalized.filter((i) => i.type === "outros"),
         });
       })
       .catch(console.error);
