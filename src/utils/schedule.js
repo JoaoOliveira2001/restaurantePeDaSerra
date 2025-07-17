@@ -11,7 +11,7 @@ export function checkAvailability(category) {
   if (category === 'lanches') {
     if (day >= 1 && day <= 4) {
       // Monday to Thursday
-      return hour >= 10 && hour < 21;
+      return hour >= 10 && hour < 24;
     }
     if (day === 5 || day === 6) {
       // Friday and Saturday
