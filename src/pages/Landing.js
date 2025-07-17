@@ -122,11 +122,13 @@ export default function Landing() {
   };
 
   const aplicarCupom = () => {
-    if (!cupom) return;
-    fetch(`/api/verificar-cupom?code=${encodeURIComponent(cupom)}`)
+    const code = cupom.trim().toUpperCase();
+    if (!code) return;
+    fetch(`/api/verificar-cupom?code=${encodeURIComponent(code)}`)
       .then((res) => res.json())
       .then((data) => {
         if (data.valid) {
+          setCupom(code);
           setCupomValido(true);
           setCart((prev) => {
             if (prev.find((i) => i.id === "cocacola-gratis")) return prev;
@@ -216,6 +218,7 @@ export default function Landing() {
       telefone: form.telefone,
       endereco,
       produtos,
+      cupom: cupomValido ? cupom.trim().toUpperCase() : '',
       frete,
       quantidade,
       total: Number((totalItens + frete).toFixed(2)),
