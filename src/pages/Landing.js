@@ -176,6 +176,11 @@ export default function Landing() {
   const handleSubmit = (e) => {
     e.preventDefault();
 
+    if (form.recebimento === "entrega" && !form.frete) {
+      alert("Por favor, selecione o frete para entrega.");
+      return;
+    }
+
     const id = Math.random().toString(36).substr(2, 9).toUpperCase();
     const data = new Date().toISOString().split("T")[0];
 
@@ -591,6 +596,7 @@ export default function Landing() {
                     value={form.frete}
                     onChange={handleChange}
                     className="border p-2 rounded"
+                    required
                   >
                     <option value="">Escolha o frete</option>
                     {freteOptions.map((f) => (
