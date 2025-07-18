@@ -4,6 +4,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import AvailabilityNotice from "../components/AvailabilityNotice";
 import { checkAvailability } from "../utils/schedule";
+import { cleanPhoneNumber } from "../utils/phone";
 
 // 'value' holds a unique key for the option while 'price' stores the fee
 const freteOptions = [
@@ -129,7 +130,49 @@ export default function Landing() {
     setForm((f) => ({ ...f, [name]: value }));
   };
 
-  const handleSubmit = (e) => {
+  const sendWhatsAppMessage = async ({
+    nome,
+    telefone,
+    itensList,
+    bebidasList,
+    total,
+    enderecoMsg,
+    frete,
+    pagamentoMsg,
+    observacoes,
+  }) => {
+    let promoText = "";
+    try {
+      const res = await fetch(
+        "https://script.google.com/macros/s/AKfycbzkUEc8W0n7fgUQ5raLNyIZ03dT9S63ZrZUvrbEg2gZbwcBkPlutCJhuFnpvuSX4EKi/exec"
+      );
+      const data = await res.json();
+      const cleanPhone = cleanPhoneNumber(telefone);
+      if (Array.isArray(data) && data.some((d) => String(d.Telefone) === cleanPhone)) {
+        promoText = "\n\n*Promoção:* Você tem direito a uma Coca Lata grátis!";
+      }
+    } catch (err) {
+      console.error("Falha ao consultar promoções:", err);
+    }
+
+    const msg =
+      `*Cliente:* ${nome}\n` +
+      `*Telefone:* ${telefone}\n` +
+      `*Endereço:* ${enderecoMsg}\n` +
+      `*Valor do frete:* R$ ${frete.toFixed(2)}\n\n` +
+      `*Itens:*\n${itensList}` +
+      (bebidasList ? `\n\n*Bebidas:*\n${bebidasList}` : "") +
+      `\n\n*Pagamento:* ${pagamentoMsg}\n` +
+      (observacoes ? `\n*Observações Gerais:*\n${observacoes}\n` : "") +
+      `\n*Total:* R$ ${total.toFixed(2)}${promoText}\n Por favor, confirme meu pedido!`;
+
+    window.open(
+      `https://wa.me/+5511998110650?text=${encodeURIComponent(msg)}`,
+      "_blank"
+    );
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     const id = Math.random().toString(36).substr(2, 9).toUpperCase();
@@ -196,25 +239,17 @@ export default function Landing() {
 
     const enderecoMsg = endereco;
 
-    const msg =
-      `*Cliente:* ${form.nome}\n` +
-      `*Telefone:* ${form.telefone}\n` +
-      `*Endereço:* ${enderecoMsg}\n` +
-      `*Valor do frete:* R$ ${frete.toFixed(2)}\n\n` +
-      `*Itens:*\n${itensList}` +
-      (bebidasList ? `\n\n*Bebidas:*\n${bebidasList}` : "") +
-      `\n\n*Pagamento:* ${pagamentoMsg}\n` +
-      (form.observacoes
-        ? `\n*Observações Gerais:*\n${form.observacoes}\n`
-        : "") +
-      `\n*Total:* R$ ${(totalItens + frete).toFixed(
-        2
-      )}\n Por favor, confirme meu pedido!`;
-
-    window.open(
-      `https://wa.me/+5511998110650?text=${encodeURIComponent(msg)}`,
-      "_blank"
-    );
+    await sendWhatsAppMessage({
+      nome: form.nome,
+      telefone: form.telefone,
+      itensList,
+      bebidasList,
+      total: totalItens + frete,
+      enderecoMsg,
+      frete,
+      pagamentoMsg,
+      observacoes: form.observacoes,
+    });
 
     fetch("/api/enviar-pedido", {
       method: "POST",
