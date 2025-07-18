@@ -45,6 +45,9 @@ export default function Landing() {
     outros: [],
   });
   const [cart, setCart] = useState([]);
+  const [couponCode, setCouponCode] = useState("");
+  const [couponApplied, setCouponApplied] = useState(false);
+  const [couponError, setCouponError] = useState("");
   const cartRef = useRef(null);
   const formRef = useRef(null);
   const [showForm, setShowForm] = useState(false);
@@ -122,6 +125,48 @@ export default function Landing() {
 
   const updateObs = (id, text) => {
     setCart((prev) => prev.map((i) => (i.id === id ? { ...i, obs: text } : i)));
+  };
+
+  const applyCoupon = () => {
+    if (!couponCode || couponApplied) return;
+    fetch(
+      `https://script.google.com/macros/s/AKfycbzkUEc8W0n7fgUQ5raLNyIZ03dT9S63ZrZUvrbEg2gZbwcBkPlutCJhuFnpvuSX4EKi/exec?cupom=${couponCode}`
+    )
+      .then((res) => res.json())
+      .then((data) => {
+        const info = Array.isArray(data) ? data[0] : null;
+        if (
+          info &&
+          info.Cupom === couponCode &&
+          Number(info.diffDays) > 0
+        ) {
+          if (!cart.find((it) => it.id === "coke-free")) {
+            setCart((prev) => [
+              ...prev,
+              {
+                id: "coke-free",
+                name: "Coca-Cola Grátis",
+                price: 0,
+                qty: 1,
+                type: "bebida",
+                obs: "",
+              },
+            ]);
+          }
+          setCouponApplied(true);
+          setCouponError("");
+          toast.success(
+            "✅ Cupom aplicado! Coca-Cola grátis adicionada",
+            { autoClose: 2000, hideProgressBar: true }
+          );
+        } else {
+          setCouponError("Cupom inválido ou expirado");
+        }
+      })
+      .catch((err) => {
+        console.error("Erro ao validar cupom", err);
+        setCouponError("Cupom inválido ou expirado");
+      });
   };
 
   const handleChange = (e) => {
@@ -423,6 +468,32 @@ export default function Landing() {
               </li>
             ))}
           </ul>
+          <div className="mb-2">
+            <div className="flex">
+              <input
+                type="text"
+                value={couponCode}
+                onChange={(e) => setCouponCode(e.target.value)}
+                placeholder="Cupom"
+                disabled={couponApplied}
+                className={`border rounded-l px-2 py-1 text-sm flex-1 ${couponApplied ? 'bg-gray-100 border-green-500' : ''}`}
+              />
+              <button
+                type="button"
+                onClick={applyCoupon}
+                disabled={couponApplied}
+                className="bg-[#FFD700] text-black px-3 rounded-r"
+              >
+                Aplicar
+              </button>
+            </div>
+            {couponError && (
+              <p className="text-red-600 text-xs mt-1">{couponError}</p>
+            )}
+            {couponApplied && (
+              <p className="text-green-600 text-xs mt-1">Cupom aplicado!</p>
+            )}
+          </div>
           <div className="mt-2">
             <div className="flex justify-between font-bold mb-2">
               <span>Total</span>
@@ -452,6 +523,33 @@ export default function Landing() {
             Finalizar Pedido
           </h2>
           <form onSubmit={handleSubmit} className="space-y-4">
+            <div>
+              <label className="block mb-1 font-semibold">Cupom</label>
+              <div className="flex">
+                <input
+                  type="text"
+                  value={couponCode}
+                  onChange={(e) => setCouponCode(e.target.value)}
+                  placeholder="Cupom"
+                  disabled={couponApplied}
+                  className={`border rounded-l px-2 py-1 flex-1 ${couponApplied ? 'bg-gray-100 border-green-500' : ''}`}
+                />
+                <button
+                  type="button"
+                  onClick={applyCoupon}
+                  disabled={couponApplied}
+                  className="bg-[#FFD700] text-black px-3 rounded-r"
+                >
+                  Aplicar
+                </button>
+              </div>
+              {couponError && (
+                <p className="text-red-600 text-xs mt-1">{couponError}</p>
+              )}
+              {couponApplied && (
+                <p className="text-green-600 text-xs mt-1">Cupom aplicado!</p>
+              )}
+            </div>
             <fieldset>
               <legend className="font-semibold mb-2">Dados do cliente</legend>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
