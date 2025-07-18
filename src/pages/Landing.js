@@ -6,6 +6,7 @@ import AvailabilityNotice from "../components/AvailabilityNotice";
 import { checkAvailability } from "../utils/schedule";
 import { hasFreeCoca, fetchFreeCocaList } from "../utils/promotions";
 import { normalizePhone } from "../utils/phone";
+import { fetchSiteStatus } from "../utils/siteStatus";
 
 // 'value' holds a unique key for the option while 'price' stores the fee
 const freteOptions = [
@@ -52,6 +53,7 @@ export default function Landing() {
   const [showForm, setShowForm] = useState(false);
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [promoPhones, setPromoPhones] = useState([]);
+  const [siteEnabled, setSiteEnabled] = useState(true);
   const [form, setForm] = useState({
     nome: "",
     telefone: "",
@@ -93,6 +95,13 @@ export default function Landing() {
       .catch((err) => {
         console.error("Falha ao obter promoções:", err);
         setPromoPhones([]);
+      });
+
+    fetchSiteStatus()
+      .then(setSiteEnabled)
+      .catch((err) => {
+        console.error("Falha ao obter status do site:", err);
+        setSiteEnabled(true);
       });
   }, []);
 
@@ -298,6 +307,14 @@ export default function Landing() {
   };
 
   const logoUrl = "https://i.imgur.com/0qfGnRz.jpeg";
+
+  if (!siteEnabled) {
+    return (
+      <div className="flex items-center justify-center min-h-screen bg-gray-100">
+        <h1 className="text-xl font-semibold">Loja fechada no momento</h1>
+      </div>
+    );
+  }
 
   return (
     <div className="font-sans bg-gray-100 min-h-screen">
