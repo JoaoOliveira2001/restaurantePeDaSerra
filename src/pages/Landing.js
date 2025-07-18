@@ -5,6 +5,7 @@ import "react-toastify/dist/ReactToastify.css";
 import AvailabilityNotice from "../components/AvailabilityNotice";
 import { checkAvailability } from "../utils/schedule";
 import { checkFreeCoca } from "../utils/promotions";
+import { normalizePhone } from "../utils/phone";
 
 // 'value' holds a unique key for the option while 'price' stores the fee
 const freteOptions = [
@@ -141,14 +142,15 @@ export default function Landing() {
     pagamentoMsg,
     observacoes,
   }) => {
-    const hasPromo = await checkFreeCoca(telefone);
+    const cleanPhone = normalizePhone(telefone);
+    const hasPromo = await checkFreeCoca(cleanPhone);
     const promoText = hasPromo
       ? "\n\n*Promoção:* Você tem direito a uma Coca Lata grátis!"
       : "";
 
     const msg =
       `*Cliente:* ${nome}\n` +
-      `*Telefone:* ${telefone}\n` +
+      `*Telefone:* ${cleanPhone}\n` +
       `*Endereço:* ${enderecoMsg}\n` +
       `*Valor do frete:* R$ ${frete.toFixed(2)}\n\n` +
       `*Itens:*\n${itensList}` +
@@ -205,11 +207,12 @@ export default function Landing() {
     const freteObj = freteOptions.find((f) => f.value === form.frete);
     const frete = freteObj ? freteObj.price : 0;
 
+    const cleanPhone = normalizePhone(form.telefone);
     const pedido = {
       id,
       data,
       nome: form.nome,
-      telefone: form.telefone,
+      telefone: cleanPhone,
       endereco,
       produtos,
       frete,
@@ -232,7 +235,7 @@ export default function Landing() {
 
     await sendWhatsAppMessage({
       nome: form.nome,
-      telefone: form.telefone,
+      telefone: cleanPhone,
       itensList,
       bebidasList,
       total: totalItens + frete,
