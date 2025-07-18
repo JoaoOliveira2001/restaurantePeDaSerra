@@ -147,7 +147,6 @@ export default function Landing() {
         "https://script.google.com/macros/s/AKfycbzkUEc8W0n7fgUQ5raLNyIZ03dT9S63ZrZUvrbEg2gZbwcBkPlutCJhuFnpvuSX4EKi/exec"
       );
       const data = await res.json();
-      const cleanPhone = cleanPhoneNumber(telefone);
       if (Array.isArray(data) && data.some((d) => String(d.Telefone) === cleanPhone)) {
         promoText = "\n\n*Promoção:* Você tem direito a uma Coca Lata grátis!";
       }
