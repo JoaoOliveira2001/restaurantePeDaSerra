@@ -4,6 +4,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import AvailabilityNotice from "../components/AvailabilityNotice";
 import { checkAvailability } from "../utils/schedule";
+import { checkFreeCoca } from "../utils/promotions";
 
 // 'value' holds a unique key for the option while 'price' stores the fee
 const freteOptions = [
@@ -140,19 +141,10 @@ export default function Landing() {
     pagamentoMsg,
     observacoes,
   }) => {
-    let promoText = "";
-    try {
-      const res = await fetch(
-        "https://script.google.com/macros/s/AKfycbzkUEc8W0n7fgUQ5raLNyIZ03dT9S63ZrZUvrbEg2gZbwcBkPlutCJhuFnpvuSX4EKi/exec"
-      );
-      const data = await res.json();
-      const cleanPhone = telefone.replace(/\D/g, "");
-      if (Array.isArray(data) && data.some((d) => String(d.Telefone) === cleanPhone)) {
-        promoText = "\n\n*Promoção:* Você tem direito a uma Coca Lata grátis!";
-      }
-    } catch (err) {
-      console.error("Falha ao consultar promoções:", err);
-    }
+    const hasPromo = await checkFreeCoca(telefone);
+    const promoText = hasPromo
+      ? "\n\n*Promoção:* Você tem direito a uma Coca Lata grátis!"
+      : "";
 
     const msg =
       `*Cliente:* ${nome}\n` +
