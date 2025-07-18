@@ -48,7 +48,7 @@ export default function Landing() {
   const [couponCode, setCouponCode] = useState("");
   const [couponApplied, setCouponApplied] = useState(false);
   const [couponError, setCouponError] = useState("");
-  const [couponData, setCouponData] = useState(null);
+  const [couponList, setCouponList] = useState([]);
   const cartRef = useRef(null);
   const formRef = useRef(null);
   const [showForm, setShowForm] = useState(false);
@@ -91,17 +91,18 @@ export default function Landing() {
   }, []);
 
   useEffect(() => {
-    const stored = localStorage.getItem("couponCode");
-    if (!stored) return;
-    setCouponCode(stored);
     fetch(
-      `https://script.google.com/macros/s/AKfycbzkUEc8W0n7fgUQ5raLNyIZ03dT9S63ZrZUvrbEg2gZbwcBkPlutCJhuFnpvuSX4EKi/exec?cupom=${stored}`
+      "https://script.google.com/macros/s/AKfycbzkUEc8W0n7fgUQ5raLNyIZ03dT9S63ZrZUvrbEg2gZbwcBkPlutCJhuFnpvuSX4EKi/exec"
     )
       .then((res) => res.json())
       .then((data) => {
-        const info = Array.isArray(data) ? data[0] : null;
-        setCouponData(info);
-        if (info && info.Cupom === stored && Number(info.diffDays) > 0) {
+        const list = Array.isArray(data) ? data : [];
+        setCouponList(list);
+        const stored = localStorage.getItem("couponCode");
+        if (!stored) return;
+        setCouponCode(stored);
+        const info = list.find((c) => c.Cupom === stored);
+        if (info && Number(info.diffDays) > 0) {
           if (!cart.find((it) => it.id === "coke-free")) {
             setCart((prev) => [
               ...prev,
@@ -117,10 +118,12 @@ export default function Landing() {
           }
           setCouponApplied(true);
           localStorage.setItem("couponCode", stored);
+        } else {
+          localStorage.removeItem("couponCode");
         }
       })
       .catch(() => {
-        setCouponData(null);
+        setCouponList([]);
       });
   }, []);
 
@@ -165,49 +168,31 @@ export default function Landing() {
   const applyCoupon = () => {
     if (!couponCode || couponApplied) return;
 
-    const validate = (info) => {
-      if (info && info.Cupom === couponCode && Number(info.diffDays) > 0) {
-        if (!cart.find((it) => it.id === "coke-free")) {
-          setCart((prev) => [
-            ...prev,
-            {
-              id: "coke-free",
-              name: "Coca-Cola Grátis",
-              price: 0,
-              qty: 1,
-              type: "bebida",
-              obs: "",
-            },
-          ]);
-        }
-        setCouponApplied(true);
-        setCouponError("");
-        localStorage.setItem("couponCode", couponCode);
-        toast.success("✅ Cupom aplicado! Coca-Cola grátis adicionada", {
-          autoClose: 2000,
-          hideProgressBar: true,
-        });
-      } else {
-        setCouponError("Coupon expired or invalid");
-        localStorage.removeItem("couponCode");
+    const info = couponList.find((c) => c.Cupom === couponCode);
+    if (info && Number(info.diffDays) > 0) {
+      if (!cart.find((it) => it.id === "coke-free")) {
+        setCart((prev) => [
+          ...prev,
+          {
+            id: "coke-free",
+            name: "Coca-Cola Grátis",
+            price: 0,
+            qty: 1,
+            type: "bebida",
+            obs: "",
+          },
+        ]);
       }
-    };
-
-    if (!couponData) {
-      fetch(
-        `https://script.google.com/macros/s/AKfycbzkUEc8W0n7fgUQ5raLNyIZ03dT9S63ZrZUvrbEg2gZbwcBkPlutCJhuFnpvuSX4EKi/exec?cupom=${couponCode}`
-      )
-        .then((res) => res.json())
-        .then((data) => {
-          const info = Array.isArray(data) ? data[0] : null;
-          setCouponData(info);
-          validate(info);
-        })
-        .catch(() => {
-          setCouponError("Coupon expired or invalid");
-        });
+      setCouponApplied(true);
+      setCouponError("");
+      localStorage.setItem("couponCode", couponCode);
+      toast.success("✅ Cupom aplicado! Coca-Cola grátis adicionada", {
+        autoClose: 2000,
+        hideProgressBar: true,
+      });
     } else {
-      validate(couponData);
+      setCouponError("Coupon expired or invalid");
+      localStorage.removeItem("couponCode");
     }
   };
 
