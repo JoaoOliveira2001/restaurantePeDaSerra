@@ -4,7 +4,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import AvailabilityNotice from "../components/AvailabilityNotice";
 import { checkAvailability } from "../utils/schedule";
-import { checkFreeCoca } from "../utils/promotions";
+import { hasFreeCoca, fetchFreeCocaList } from "../utils/promotions";
 import { normalizePhone } from "../utils/phone";
 
 // 'value' holds a unique key for the option while 'price' stores the fee
@@ -51,6 +51,7 @@ export default function Landing() {
   const formRef = useRef(null);
   const [showForm, setShowForm] = useState(false);
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const [promoPhones, setPromoPhones] = useState([]);
   const [form, setForm] = useState({
     nome: "",
     telefone: "",
@@ -86,6 +87,13 @@ export default function Landing() {
         });
       })
       .catch(console.error);
+
+    fetchFreeCocaList()
+      .then(setPromoPhones)
+      .catch((err) => {
+        console.error("Falha ao obter promoções:", err);
+        setPromoPhones([]);
+      });
   }, []);
 
   const addToCart = (item) => {
@@ -131,7 +139,7 @@ export default function Landing() {
     setForm((f) => ({ ...f, [name]: value }));
   };
 
-  const sendWhatsAppMessage = async ({
+  const sendWhatsAppMessage = ({
     nome,
     telefone,
     itensList,
@@ -143,7 +151,7 @@ export default function Landing() {
     observacoes,
   }) => {
     const cleanPhone = normalizePhone(telefone);
-    const hasPromo = await checkFreeCoca(cleanPhone);
+    const hasPromo = hasFreeCoca(cleanPhone, promoPhones);
     const promoText = hasPromo
       ? "\n\n*Promoção:* Você tem direito a uma Coca Lata grátis!"
       : "";
@@ -165,7 +173,7 @@ export default function Landing() {
     );
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
 
     const id = Math.random().toString(36).substr(2, 9).toUpperCase();
@@ -233,7 +241,7 @@ export default function Landing() {
 
     const enderecoMsg = endereco;
 
-    await sendWhatsAppMessage({
+    sendWhatsAppMessage({
       nome: form.nome,
       telefone: cleanPhone,
       itensList,
