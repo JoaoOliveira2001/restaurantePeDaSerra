@@ -191,7 +191,7 @@ export default function Landing() {
     e.preventDefault();
 
     if (form.recebimento === "entrega" && !form.frete) {
-      alert("Por favor, selecione o frete para entrega.");
+      toast.error("Por favor, selecione o frete para entrega.");
       return;
     }
 
@@ -272,6 +272,10 @@ export default function Landing() {
       observacoes: form.observacoes,
     });
 
+    toast.success("Recebemos o seu pedido! Muito obrigado.");
+    setCart([]);
+    setShowForm(false);
+
     fetch("/api/enviar-pedido", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -282,13 +286,10 @@ export default function Landing() {
           const text = await response.text();
           throw new Error(text || "Erro ao enviar pedido");
         }
-        alert("Recebemos o seu pedido! Muito obrigado.");
-        setCart([]);
-        setShowForm(false);
       })
       .catch((err) => {
         console.error("Falha ao enviar pedido:", err);
-        alert("Erro ao enviar pedido");
+        toast.error("Erro ao enviar pedido");
       });
   };
 
