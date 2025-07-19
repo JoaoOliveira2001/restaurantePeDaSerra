@@ -9,18 +9,8 @@ export function checkAvailability(category) {
   }
 
   if (category === 'lanches') {
-    if (day >= 1 && day <= 4) {
-      // Monday to Thursday
-      return hour >= 10 && hour < 24;
-    }
-    if (day === 5 || day === 6) {
-      // Friday and Saturday
-      return hour >= 10 && hour < 23;
-    }
-    if (day === 0) {
-      // Sunday
-      return hour >= 18 && hour < 23;
-    }
+    // Lanches are now available 24/7
+    return true;
   }
 
   return true;
