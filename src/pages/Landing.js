@@ -180,6 +180,14 @@ export default function Landing() {
       `https://wa.me/+5511998110650?text=${encodeURIComponent(msg)}`,
       "_blank"
     );
+
+    fetch("/api/webhook", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ message: msg }),
+    }).catch((err) => {
+      console.error("Falha ao enviar webhook:", err);
+    });
   };
 
   const handleSubmit = (e) => {
