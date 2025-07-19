@@ -330,7 +330,7 @@ export default function Landing() {
             <img
               src={logoUrl}
               alt="Logo Pé da Serra"
-              className="w-10 h-10 rounded-full object-cover"
+              className="w-12 h-12 rounded-full object-contain object-center"
             />
             <span className="font-playfair text-xl">Pé da Serra</span>
           </div>
@@ -340,19 +340,19 @@ export default function Landing() {
 
       <section
         id="inicio"
-        className="relative h-60 flex items-center justify-center text-white"
+        className="relative h-72 flex items-center justify-center text-white"
       >
         <img
           src="https://i.imgur.com/DbVYSxW.png"
           alt="Serra"
-          className="absolute inset-0 w-full h-full object-cover"
+          className="absolute inset-0 w-full h-full object-contain object-center"
         />
         <div className="absolute inset-0 bg-black/50" />
         <div className="relative z-10 text-center p-4">
           <img
             src={logoUrl}
             alt="Logo Pé da Serra"
-            className="w-20 h-20 object-cover rounded-full mx-auto mb-2"
+            className="w-24 h-24 object-contain rounded-full mx-auto mb-2"
           />
           <h1 className="text-3xl font-playfair mb-2">Pé da Serra</h1>
           <p className="text-sm font-light">
@@ -389,7 +389,7 @@ export default function Landing() {
               <img
                 src={item.image}
                 alt={item.name}
-                className="h-40 w-full object-cover"
+                className="h-48 w-full object-contain object-center"
               />
               <div className="p-4">
                 <h3 className="font-playfair text-lg">{item.name}</h3>
@@ -440,7 +440,7 @@ export default function Landing() {
               <img
                 src={logoUrl}
                 alt="Logo Pé da Serra"
-                className="w-5 h-5 object-cover rounded-full"
+                  className="w-6 h-6 object-contain rounded-full"
               />
               <ShoppingCart size={18} /> Carrinho
             </h4>
@@ -511,7 +511,7 @@ export default function Landing() {
           <img
             src={logoUrl}
             alt="Logo Pé da Serra"
-            className="w-16 h-16 object-cover rounded-full mx-auto mb-4"
+            className="w-20 h-20 object-contain rounded-full mx-auto mb-4"
           />
           <h2 className="text-xl font-bold mb-4 text-center">
             Finalizar Pedido
@@ -656,7 +656,7 @@ export default function Landing() {
         <img
           src={logoUrl}
           alt="Logo Pé da Serra"
-          className="w-10 h-10 object-cover rounded-full mx-auto mb-2"
+          className="w-12 h-12 object-contain rounded-full mx-auto mb-2"
         />
         <p className="font-semibold">Contact</p>
         <p>+55 11 99811-0650</p>
