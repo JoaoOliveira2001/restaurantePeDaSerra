@@ -174,7 +174,7 @@ export default function Landing() {
       (bebidasList ? `\n\n*Bebidas:*\n${bebidasList}` : "") +
       `\n\n*Pagamento:* ${pagamentoMsg}\n` +
       (observacoes ? `\n*Observações Gerais:*\n${observacoes}\n` : "") +
-      `\n*Total:* R$ ${total.toFixed(2)}${promoText}\n Por favor, confirme meu pedido!`;
+      `\n*Total:* R$ ${total.toFixed(2)}${promoText}\n`;
 
     window.open(
       `https://wa.me/+5511998110650?text=${encodeURIComponent(msg)}`,
