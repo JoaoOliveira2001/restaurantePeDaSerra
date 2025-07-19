@@ -176,10 +176,7 @@ export default function Landing() {
       (observacoes ? `\n*Observações Gerais:*\n${observacoes}\n` : "") +
       `\n*Total:* R$ ${total.toFixed(2)}${promoText}\n`;
 
-    window.open(
-      `https://wa.me/+5511998110650?text=${encodeURIComponent(msg)}`,
-      "_blank"
-    );
+    // Mensagem não é mais enviada automaticamente para o WhatsApp.
 
     fetch("/api/webhook", {
       method: "POST",
@@ -285,7 +282,7 @@ export default function Landing() {
           const text = await response.text();
           throw new Error(text || "Erro ao enviar pedido");
         }
-        alert("Pedido enviado com sucesso!");
+        alert("Recebemos o seu pedido! Muito obrigado.");
         setCart([]);
         setShowForm(false);
       })
