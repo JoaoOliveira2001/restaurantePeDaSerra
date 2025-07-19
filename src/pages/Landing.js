@@ -11,7 +11,7 @@ import { fetchSiteStatus } from "../utils/siteStatus";
 // 'value' holds a unique key for the option while 'price' stores the fee
 const freteOptions = [
   { value: "pinhal", label: "Pinhal – R$ 10,00", price: 10 },
-  { value: "vilareijo", label: "Vilareijo – R$ 5,00", price: 5 },
+  { value: "vilareijo", label: "Vilareijo – R$ 6,00", price: 6 },
   { value: "condominio", label: "Condominio – R$ 8,00", price: 8 },
   { value: "cururu", label: "Cururu – R$ 7,00", price: 7 },
   { value: "colina", label: "Colina – R$ 4,00", price: 4 },
