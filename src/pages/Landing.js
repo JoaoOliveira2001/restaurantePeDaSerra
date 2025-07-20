@@ -15,7 +15,7 @@ const freteOptions = [
   { value: "condominio", label: "Condominio – R$ 8,00", price: 8 },
   { value: "cururu", label: "Cururu – R$ 7,00", price: 7 },
   { value: "colina", label: "Colina – R$ 4,00", price: 4 },
-  { value: "jacare", label: "Jacaré – R$ 4,00", price: 4 },
+  { value: "jacare", label: "Jacaré – R$ 5,00", price: 5 },
   { value: "cai", label: "Caí – R$ 10,00", price: 10 },
   { value: "bonfim", label: "Bonfim – R$ 6,00", price: 6 },
   { value: "camping_cabreuva", label: "Camping Cabreúva – R$ 15,00", price: 15 },
