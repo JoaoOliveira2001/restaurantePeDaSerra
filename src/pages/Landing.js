@@ -325,7 +325,7 @@ export default function Landing() {
   return (
     <div className="font-sans bg-gray-100 min-h-screen">
       <header className="sticky top-0 w-full text-white z-50 bg-black">
-        <div className="max-w-4xl mx-auto flex items-center justify-between p-4">
+        <div className="max-w-6xl mx-auto flex items-center justify-between p-4">
           <div className="flex items-center space-x-2">
             <img
               src={logoUrl}
@@ -378,7 +378,7 @@ export default function Landing() {
         ))}
       </div>
 
-      <main className="max-w-4xl mx-auto p-4 space-y-4 pt-2">
+      <main className="max-w-6xl mx-auto p-4 space-y-4 pt-2">
         <AvailabilityNotice category={activeCategory} />
         {categoryAvailable &&
           menu[active].map((item) => (
@@ -506,7 +506,7 @@ export default function Landing() {
       {showForm && (
         <div
           ref={formRef}
-          className="max-w-2xl mx-auto p-4 mt-4 bg-white shadow"
+          className="max-w-3xl mx-auto p-4 mt-4 bg-white shadow"
         >
           <img
             src={logoUrl}
