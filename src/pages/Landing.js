@@ -158,6 +158,7 @@ export default function Landing() {
     frete,
     pagamentoMsg,
     observacoes,
+    order,
   }) => {
     const cleanPhone = normalizePhone(telefone);
     const hasPromo = hasFreeCoca(cleanPhone, promoPhones);
@@ -181,7 +182,7 @@ export default function Landing() {
     fetch("/api/webhook", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ message: msg }),
+      body: JSON.stringify({ message: msg, order }),
     }).catch((err) => {
       console.error("Falha ao enviar webhook:", err);
     });
@@ -270,6 +271,7 @@ export default function Landing() {
       frete,
       pagamentoMsg,
       observacoes: form.observacoes,
+      order: pedido,
     });
 
     toast.success("Recebemos o seu pedido! Muito obrigado.");
