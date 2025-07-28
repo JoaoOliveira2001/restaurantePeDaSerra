@@ -380,38 +380,42 @@ export default function Landing() {
         ))}
       </div>
 
-      <main className="max-w-4xl mx-auto p-4 space-y-4 pt-2">
+      <main className="max-w-4xl mx-auto p-4 pt-2">
         <AvailabilityNotice category={activeCategory} />
-        {categoryAvailable &&
-          menu[active].map((item) => (
-            <div
-              key={item.id}
-              className="bg-white rounded-lg shadow overflow-hidden"
-            >
-              <img
-                src={item.image}
-                alt={item.name}
-                className="h-40 w-full object-cover"
-              />
-              <div className="p-4">
-                <h3 className="font-playfair text-lg">{item.name}</h3>
-                {item.description && (
-                  <p className="text-sm text-gray-600 mb-2">
-                    {item.description}
-                  </p>
-                )}
-                <div className="flex justify-between items-center">
-                  <span className="font-bold">R$ {item.price.toFixed(2)}</span>
-                  <button
-                    onClick={() => addToCart(item)}
-                    className="bg-[#FFD700] text-black px-3 py-1 rounded-full shadow"
-                  >
-                    Adicionar
-                  </button>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {categoryAvailable &&
+            menu[active].map((item) => (
+              <div
+                key={item.id}
+                className="flex bg-white rounded-lg shadow overflow-hidden"
+              >
+                <img
+                  src={item.image}
+                  alt={item.name}
+                  className="w-2/5 object-cover"
+                />
+                <div className="p-4 flex flex-col flex-1">
+                  <h3 className="font-bold font-playfair">{item.name}</h3>
+                  {item.description && (
+                    <p className="text-sm text-gray-600 mb-2 flex-1">
+                      {item.description}
+                    </p>
+                  )}
+                  <div className="flex justify-between items-center mt-auto">
+                    <span className="font-bold text-lg">
+                      R$ {item.price.toFixed(2)}
+                    </span>
+                    <button
+                      onClick={() => addToCart(item)}
+                      className="bg-[#FFD700] text-black px-3 py-1 rounded-full shadow"
+                    >
+                      Adicionar
+                    </button>
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
+            ))}
+        </div>
       </main>
 
       <ToastContainer position="bottom-right" style={{ bottom: "5rem" }} />
