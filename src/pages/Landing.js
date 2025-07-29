@@ -8,6 +8,21 @@ import { hasFreeCoca, fetchFreeCocaList } from "../utils/promotions";
 import { normalizePhone } from "../utils/phone";
 import { fetchSiteStatus } from "../utils/siteStatus";
 
+function parseAddress(address) {
+  if (!address) return { rua: "", numero: "", complemento: "", bairro: "" };
+  const parts = address.split(",").map((p) => p.trim());
+  const rua = parts[0] || "";
+  let numero = parts[1] || "";
+  let complemento = "";
+  if (numero.includes("-")) {
+    const [num, comp] = numero.split("-").map((p) => p.trim());
+    numero = num;
+    complemento = comp;
+  }
+  const bairro = parts.slice(2).join(", ").trim();
+  return { rua, numero, complemento, bairro };
+}
+
 // 'value' holds a unique key for the option while 'price' stores the fee
 const freteOptions = [
   { value: "pinhal", label: "Pinhal – R$ 10,00", price: 10 },
@@ -104,6 +119,35 @@ export default function Landing() {
         setSiteEnabled(true);
       });
   }, []);
+
+  useEffect(() => {
+    const clean = form.telefone.replace(/\D/g, "");
+    if (clean.length < 8) return;
+    const controller = new AbortController();
+    const timeout = setTimeout(() => {
+      fetch(
+        `https://script.google.com/macros/s/AKfycbzBmD1O9KhG96hi-rGe6HQwfrbhVH3kZrxUIwXuwrYLlag64iM4IwBF9R0fJyXWgdY/exec?telefone=${clean}`,
+        { signal: controller.signal }
+      )
+        .then((res) => (res.ok ? res.json() : null))
+        .then((data) => {
+          if (!data || !data.dados) return;
+          const d = data.dados;
+          const addr = parseAddress(d["Endereço"]);
+          setForm((f) => ({
+            ...f,
+            nome: d.Nome || f.nome,
+            telefone: String(d.Telefone || clean),
+            ...addr,
+          }));
+        })
+        .catch(() => {});
+    }, 500);
+    return () => {
+      clearTimeout(timeout);
+      controller.abort();
+    };
+  }, [form.telefone]);
 
   const addToCart = (item) => {
     setCart((prev) => {
