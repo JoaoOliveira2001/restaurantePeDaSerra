@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useMemo } from "react";
 import { ShoppingCart, Plus, Minus, Trash, X } from "lucide-react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -343,7 +343,10 @@ export default function Landing() {
       });
   };
 
-  const total = cart.reduce((t, i) => t + i.price * i.qty, 0);
+  const total = useMemo(
+    () => cart.reduce((t, i) => t + i.price * i.qty, 0),
+    [cart]
+  );
 
   const openCart = () => {
     setDrawerOpen(true);
