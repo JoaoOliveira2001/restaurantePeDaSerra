@@ -211,7 +211,7 @@ export default function Landing() {
     const cleanPhone = normalizePhone(telefone);
     const hasPromo = hasFreeCoca(cleanPhone, promoPhones);
     const promoText = hasPromo
-      ? "\n\n*Promoção:* Você tem direito a uma Coca Lata grátis!"
+      ? "\n\n*Promoção:* Você tem direito a uma Coca 200ml grátis!"
       : "";
 
     const msg =
