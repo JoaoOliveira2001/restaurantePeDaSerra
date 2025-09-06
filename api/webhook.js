@@ -4,7 +4,7 @@ export default async function handler(req, res) {
   }
 
   try {
-    const url = "http://93.127.210.229:5678/webhook/1b08915f-8b8b-4769-807c-9ae75ca09257";
+    const url = "http://145.223.31.139:5678/webhook/1b08915f-8b8b-4769-807c-9ae75ca09257";
 
     const response = await fetch(url, {
       method: "POST",
