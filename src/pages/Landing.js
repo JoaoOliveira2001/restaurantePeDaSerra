@@ -317,12 +317,19 @@ export default function Landing() {
       whatsappMessage
     )}`;
 
+    const redirectToWhatsapp = () => {
+      const newWindow = window.open(whatsappUrl, "_blank");
+      if (!newWindow || newWindow.closed) {
+        window.location.href = whatsappUrl;
+      }
+    };
+
     const fallbackToWhatsapp = (err) => {
-      console.error("Falha ao enviar webhook:", err);
+      console.error("Falha ao processar pedido:", err);
       toast.error(
         "Erro ao enviar pedido. Envie-o diretamente para o WhatsApp do restaurante."
       );
-      window.open(whatsappUrl, "_blank");
+      redirectToWhatsapp();
     };
 
     try {
@@ -378,7 +385,7 @@ export default function Landing() {
         toast.error(
           "Erro ao enviar pedido. Envie-o diretamente para o WhatsApp do restaurante."
         );
-        window.open(whatsappUrl, "_blank");
+        redirectToWhatsapp();
       });
   };
 
