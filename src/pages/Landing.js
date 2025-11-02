@@ -224,21 +224,10 @@ export default function Landing() {
       `\n\n*Pagamento:* ${pagamentoMsg}\n` +
       (observacoes ? `\n*Observações Gerais:*\n${observacoes}\n` : "") +
       `\n*Total:* R$ ${total.toFixed(2)}${promoText}\n`;
-
-    // Mensagem usada para notificação interna e fallback via WhatsApp.
-
-    fetch("/api/webhook", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ message: msg, order }),
-    }).catch((err) => {
-      console.error("Falha ao enviar webhook:", err);
-    });
-
     return msg;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (form.recebimento === "entrega" && !form.frete) {
@@ -324,6 +313,58 @@ export default function Landing() {
       order: pedido,
     });
 
+    const whatsappUrl = `https://wa.me/5511998110650?text=${encodeURIComponent(
+      whatsappMessage
+    )}`;
+
+    const redirectToWhatsapp = () => {
+      const newWindow = window.open(whatsappUrl, "_blank");
+      if (!newWindow || newWindow.closed) {
+        window.location.href = whatsappUrl;
+      }
+    };
+
+    const fallbackToWhatsapp = (err) => {
+      console.error("Falha ao processar pedido:", err);
+      toast.error(
+        "Erro ao enviar pedido. Envie-o diretamente para o WhatsApp do restaurante."
+      );
+      redirectToWhatsapp();
+    };
+
+    try {
+      const webhookResponse = await fetch("/api/webhook", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message: whatsappMessage, order: pedido }),
+      });
+
+      const webhookText = await webhookResponse.text();
+
+      if (!webhookResponse.ok) {
+        throw new Error(webhookText || "Erro ao encaminhar webhook");
+      }
+
+      if (webhookText) {
+        try {
+          const webhookData = JSON.parse(webhookText);
+          if (
+            webhookData &&
+            webhookData.code === 0 &&
+            typeof webhookData.message === "string" &&
+            webhookData.message.toLowerCase().includes("no item to return got found")
+          ) {
+            throw new Error(webhookData.message);
+          }
+        } catch (parseError) {
+          // Resposta não é um JSON válido; seguir normalmente.
+        }
+      }
+    } catch (err) {
+      fallbackToWhatsapp(err);
+      return;
+    }
+
     toast.success("Recebemos o seu pedido! Muito obrigado.");
     setCart([]);
     setShowForm(false);
@@ -344,10 +385,7 @@ export default function Landing() {
         toast.error(
           "Erro ao enviar pedido. Envie-o diretamente para o WhatsApp do restaurante."
         );
-        const whatsappUrl = `https://wa.me/5511998110650?text=${encodeURIComponent(
-          whatsappMessage
-        )}`;
-        window.open(whatsappUrl, "_blank");
+        redirectToWhatsapp();
       });
   };
 
