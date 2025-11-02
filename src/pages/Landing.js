@@ -196,7 +196,7 @@ export default function Landing() {
     setForm((f) => ({ ...f, [name]: value }));
   };
 
-  const sendWhatsAppMessage = ({
+  const buildOrderMessage = ({
     nome,
     telefone,
     itensList,
@@ -225,7 +225,7 @@ export default function Landing() {
       (observacoes ? `\n*Observações Gerais:*\n${observacoes}\n` : "") +
       `\n*Total:* R$ ${total.toFixed(2)}${promoText}\n`;
 
-    // Mensagem não é mais enviada automaticamente para o WhatsApp.
+    // Mensagem usada para notificação interna e fallback via WhatsApp.
 
     fetch("/api/webhook", {
       method: "POST",
@@ -234,6 +234,8 @@ export default function Landing() {
     }).catch((err) => {
       console.error("Falha ao enviar webhook:", err);
     });
+
+    return msg;
   };
 
   const handleSubmit = (e) => {
@@ -309,7 +311,7 @@ export default function Landing() {
 
     const enderecoMsg = endereco;
 
-    sendWhatsAppMessage({
+    const whatsappMessage = buildOrderMessage({
       nome: form.nome,
       telefone: cleanPhone,
       itensList,
@@ -339,7 +341,13 @@ export default function Landing() {
       })
       .catch((err) => {
         console.error("Falha ao enviar pedido:", err);
-        toast.error("Erro ao enviar pedido");
+        toast.error(
+          "Erro ao enviar pedido. Envie-o diretamente para o WhatsApp do restaurante."
+        );
+        const whatsappUrl = `https://wa.me/5511998110650?text=${encodeURIComponent(
+          whatsappMessage
+        )}`;
+        window.open(whatsappUrl, "_blank");
       });
   };
 
