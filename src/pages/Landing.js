@@ -67,6 +67,8 @@ export default function Landing() {
     outros: [],
   });
   const [cart, setCart] = useState([]);
+  const [cupom, setCupom] = useState("");
+  const [cupomValido, setCupomValido] = useState(false);
   const cartRef = useRef(null);
   const formRef = useRef(null);
   const [showForm, setShowForm] = useState(false);
@@ -191,6 +193,50 @@ export default function Landing() {
     setCart((prev) => prev.map((i) => (i.id === id ? { ...i, obs: text } : i)));
   };
 
+  const aplicarCupom = () => {
+    const code = cupom.trim().toUpperCase();
+    if (!code) return;
+    fetch(`/api/verificar-cupom?code=${encodeURIComponent(code)}`)
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.valid) {
+          setCupom(code);
+          setCupomValido(true);
+          setCart((prev) => {
+            if (prev.find((i) => i.id === "cocacola-gratis")) return prev;
+            return [
+              ...prev,
+              {
+                id: "cocacola-gratis",
+                name: "Coca-Cola grátis",
+                price: 0,
+                qty: 1,
+                obs: "",
+                type: "bebida",
+              },
+            ];
+          });
+          toast.success("✅ Cupom aplicado!", {
+            autoClose: 2000,
+            hideProgressBar: true,
+          });
+        } else {
+          setCupomValido(false);
+          toast.error("Cupom expirado", {
+            autoClose: 2000,
+            hideProgressBar: true,
+          });
+        }
+      })
+      .catch(() => {
+        setCupomValido(false);
+        toast.error("Cupom expirado", {
+          autoClose: 2000,
+          hideProgressBar: true,
+        });
+      });
+  };
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setForm((f) => ({ ...f, [name]: value }));
@@ -282,6 +328,7 @@ export default function Landing() {
       telefone: cleanPhone,
       endereco,
       produtos,
+      cupom: cupomValido ? cupom.trim().toUpperCase() : '',
       frete,
       quantidade,
       total: Number((totalItens + frete).toFixed(2)),
@@ -555,11 +602,11 @@ export default function Landing() {
             {cart.length === 0 && (
               <li className="text-center py-8 text-gray-500">Carrinho vazio</li>
             )}
-            {cart.map((it) => (
-              <li
-                key={it.id}
-                className="mb-2 border-b pb-2 last:border-b-0 last:pb-0"
-              >
+          {cart.map((it) => (
+            <li
+              key={it.id}
+              className="mb-2 border-b pb-2 last:border-b-0 last:pb-0"
+            >
                 <div className="flex justify-between items-center">
                   <span className="font-medium">{it.name}</span>
                   <div className="flex items-center space-x-1">
@@ -591,6 +638,22 @@ export default function Landing() {
               </li>
             ))}
           </ul>
+          <div className="flex mb-2">
+            <input
+              type="text"
+              value={cupom}
+              onChange={(e) => setCupom(e.target.value)}
+              placeholder="Cupom"
+              className="flex-1 border rounded-l px-2 py-1 text-sm"
+            />
+            <button
+              type="button"
+              onClick={aplicarCupom}
+              className="bg-[#FFD700] text-black px-3 rounded-r"
+            >
+              Aplicar
+            </button>
+          </div>
           <div className="mt-2">
             <div className="flex justify-between font-bold mb-2">
               <span>Total</span>
